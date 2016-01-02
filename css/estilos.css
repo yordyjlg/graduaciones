@@ -1,0 +1,39 @@
+
+
+
+section#contenedor{
+		/*background-color: rgb(0,0,0);*/
+		margin: 8px auto;
+		max-width: 960px;
+		padding: 0;
+		text-align: center;
+		background-color: rgb(118,190,25);
+
+}
+section#principal, aside{
+
+	font-size: 16px;
+	background-color: rgb(118,190,25);
+	border-radius: 8px;
+	display: inline-block;
+	margin: 4px;
+	max-width: 960px;
+	min-height: 240px;
+	padding: 4px;
+	text-align: center;
+	vertical-align: top;
+	width: 25%;
+
+
+}
+
+
+
+
+aside{
+
+background-color: rgb(118,190,25);
+	min-height: 300px;
+	width: 30%;
+	max-width: 30%;
+}

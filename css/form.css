@@ -1,0 +1,64 @@
+/* .checkbox_nomargins clear all margins from a checkbox
+---------------------------------------------------------*/
+	.checkbox_nomargins {
+		/*margin:0;width:13px;height:13px;overflow:hidden;
+		font-size: 10px;*/
+		margin: 0;
+		padding: 0;
+	}
+	
+/* .button some buttons style - inspired from wordpress
+------------------------------*/
+	input.button1 {
+		margin: 0;
+		padding: 2px;
+		border: 3px double #999999;
+		border-left-color: #ccc;
+		border-top-color: #ccc;
+		background: url(../img/button.gif) repeat-x left top;
+		font-size: 11px;
+		font-family: Verdana, Arial, Helvetica, sans-serif;
+	}
+	
+/* form style for forms
+-------------------------*/
+	form {
+		padding: 0;
+		margin: 0;
+	}
+
+/* input.inputgri - some style for inputs
+--------------------------------------------*/
+	input.inputgri, select.inputgri, textarea.inputgri {
+		background: #eeeeee;
+		font-size: 12px;
+		border: 2px solid #cccccc;
+		padding: 3px;
+	}
+	input.inputgri:focus, select.inputgri:focus , textarea.inputgri:focus {
+		background: #ffffff;
+		border: 1px solid #de898c;
+	}
+tr{
+
+		padding: 19px;
+		margin: 19px;
+		height: 40px;
+
+}
+input.inputgri:hover{
+
+		
+		
+		
+		border: 3px solid #de898c;
+}
+
+
+table, table td {
+    border-collapse: collapse;
+    font-size: 16px;
+    text-align: center;
+    color: #000;
+    font-family: "Times New Roman",Times,serif;
+}
