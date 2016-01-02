@@ -233,10 +233,15 @@ class productos_clientes extends CI_Controller
                 redirect(base_url().'inicio');
             }
             $data['notificacion']= $this->modelo_productos->get_datos_notificaciones($id);
-           /* echo $id;
+            if($data['notificacion']->estatus=='ENVIADOADMIN'){
+                $datantf =array(
+                    "estatus" => "VISTOUSU"
+                );
+                $this->modelo_productos->insertar_presupuesto_notificaciones($id,$datantf);
+            }
+           /*echo $id;
             echo '<pre>';
             print_r($data['notificacion']);
-            echo '<pre>'.$this->session->userdata('datos');
             die();*/
             $tipo=$data['notificacion']->tipo;
                 if($tipo=="ANILLO"){
@@ -288,7 +293,21 @@ class productos_clientes extends CI_Controller
             exit;
         }
         
-        
+        function ajax_insertar_presupuesto_notificacion(){
+            if(!$this->input->is_ajax_request()){
+                    return false;
+            }
+            $presupuesto= $this->input->post("presupuestobs");
+            $id= $this->input->post("idnotifi");
+            $data =array(
+                'estatus' => 'ENVIADOADMIN',
+                'montoBs' => $presupuesto
+            );
+            $response = $this->modelo_productos->insertar_presupuesto_notificaciones($id,$data);
+            $json = '{"results":['.json_encode($response).']}';
+            echo $json;
+            exit;
+        }
        
 }
 

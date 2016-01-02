@@ -195,7 +195,10 @@ class modelo_productos extends CI_Model
         function get_datos_notificaciones($id){
            
             $campos = array (
-				"*"
+                                "prod.*",
+                                "usu.*",
+                                "uni.*",
+                                "notf.*",
  		);
                 $data = $this->db->select($campos)
 		->distinct()
@@ -261,7 +264,11 @@ class modelo_productos extends CI_Model
 	
             //return "yordy ".$data['cantidad']." ".$data['informacion']." ".$data['id']." ".$data['tipo']." ".$this->session->userdata('id_usuario')." ".date("Y-m-d");
         }
-        
+        function insertar_presupuesto_notificaciones($idntf,$data) {
+            
+            $this->db->where('idNotificacion', $idntf);
+            return $this->db->update('notificacion', $data);
+        }
         function get_datos_presupuesto_paquetes($id){
            
             $campos = array (
@@ -295,6 +302,22 @@ class modelo_productos extends CI_Model
                 
                 return $num;
         }
+        
+        function contar_todas_notificaciones_solicitud_presupuesto(){
+                $campos = array (
+				"*"
+ 		);
+                $num = $this->db->select($campos)
+		->distinct()
+		->from('solicitud_presupuesto')
+                ->where ('estatus', 'ENVIADO')
+                ->get()
+                ->num_rows();
+                
+                
+                
+                return $num;
+        }
         function get_notificaciones(){
              
                 $campos = array (
@@ -305,6 +328,53 @@ class modelo_productos extends CI_Model
 		->from('notificacion as notif')
                 ->join('productos AS prod', 'prod.idproductos = notif.productos_idproductos', 'LEFT')
                 ->where ('estatus', 'Enviado')
+                ->get()
+                ->result_array();
+            //return $this->db->last_query();
+        }
+        
+        function get_notificaciones_solicitud_presupuesto(){
+             
+                $campos = array (
+				"*"
+ 		);
+            return $this->db->select($campos)
+		->distinct()
+		->from('solicitud_presupuesto as notif')
+                ->join('paquetes_grados AS pqt', 'pqt.idpaquetes_grados = notif.idpaquetes_grados', 'LEFT')
+                ->where ('estatus', 'ENVIADO')
+                ->get()
+                ->result_array();
+            //return $this->db->last_query();
+        }
+        
+        function contar_todas_notificaciones_usuarios(){
+                $campos = array (
+				"*"
+ 		);
+                $num = $this->db->select($campos)
+		->distinct()
+		->from('notificacion')
+                ->where ('estatus', 'ENVIADOADMIN')
+                ->where ('usuario_ci_usuario', $this->session->userdata('datos')->ci_usuario)
+                ->get()
+                ->num_rows();
+                
+                
+                
+                return $num;
+        }
+        function get_notificaciones_usuarios(){
+             
+                $campos = array (
+				"*"
+ 		);
+            return $this->db->select($campos)
+		->distinct()
+		->from('notificacion as notif')
+                ->join('productos AS prod', 'prod.idproductos = notif.productos_idproductos', 'LEFT')
+                ->where ('estatus', 'ENVIADOADMIN')
+                ->where ('usuario_ci_usuario', $this->session->userdata('datos')->ci_usuario)
                 ->get()
                 ->result_array();
             //return $this->db->last_query();

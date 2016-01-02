@@ -265,9 +265,19 @@ class productos extends CI_Controller
     }
     
     function ajax_notificaciones(){
-            
-            $json = '{"results":[[{"num_notifi":"'.$this->modelo_productos->contar_todas_notificaciones().'"},'
+            $numNotifica = $this->modelo_productos->contar_todas_notificaciones();
+            $numSolicitud_presupuesto = $this->modelo_productos->contar_todas_notificaciones_solicitud_presupuesto();
+            $total = $numNotifica+$numSolicitud_presupuesto;
+            $json = '{"results":[[{"num_notifi":"'.$total.'"},'
     . '{"notificaciones":'.json_encode($this->modelo_productos->get_notificaciones()).'}]]}';//
+            echo $json;
+            exit;
+    }
+    
+    function ajax_notificaciones_usuarios(){
+            
+            $json = '{"results":[[{"num_notifi":"'.$this->modelo_productos->contar_todas_notificaciones_usuarios().'"},'
+    . '{"notificaciones":'.json_encode($this->modelo_productos->get_notificaciones_usuarios()).'}]]}';//
             echo $json;
             exit;
     }

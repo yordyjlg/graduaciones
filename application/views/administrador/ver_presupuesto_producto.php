@@ -1,6 +1,6 @@
 <div id="cargar">
     <div id="res"></div>
-                    <form id="formulario_mensaje" name="formulario_mensaje"   method="post" >
+                    
                         <div class="row">
                             <div class="col-xs-12 col-sm-6 col-md-6">
                                 
@@ -43,6 +43,31 @@
                             </div>
 
                         </div>
+                            <div class="row">
+                                <form id="formulario_presupuesto" name="formulario_presupuesto"   method="post" >
+                                    <div class="col-sm-4 col-sm-push-4 col-sm-pull-4"  style="text-align: center;">
+                                    
+                                    <div class="form-group">
+                                        <label class="control-label" for="presupuestobs">Presupuesto:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">$</span>
+                                            <input type="text" class="form-control montop" placeholder="monto" id="presupuestobs" name="presupuestobs" value="">
+                                        </div>
+                                    </div>
+                                        <div id="divPresupuesto" >
+                                            
+                                        </div><br>
+                                    <div style="text-align: center;">
+                                        <div class="col-sm-4 col-sm-push-4 col-sm-pull-4">
+                                            <input type="hidden" value="<?=$notificacion->idNotificacion ?>" name="idnotifi" >
+                                            <input style="width: 120%; margin-top: 1%;margin-bottom: 1%;" type="submit" id="btnpresupuesto" class="boton" value="enviar" title="enviar" />
+
+                                        </div>
+                                    </div>
+                                </div>
+                                </form>
+                            </div>
+                      <form id="formulario_mensaje" name="formulario_mensaje"   method="post" >
                         <div class="row" style="text-align: center;">
                             <div style="text-align: center;">
                             <label id="titulos" >Informacion Adicional:</label>
@@ -53,12 +78,12 @@
                                     <textarea  class="form-control "  rows="5"  name="respuesta" required="" ></textarea>
                                 </div>
                                 <div style="text-align: center;">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <input type="hidden" value="<?=$notificacion->idNotificacion ?>" name="idnotifi" >
-                                <input style="width: 20%; margin-top: 1%;margin-bottom: 1%;" type="submit" id="save" class="boton" value="enviar" title="enviar" />
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <input type="hidden" value="<?=$notificacion->idNotificacion ?>" name="idnotifi" >
+                                        <input style="width: 20%; margin-top: 1%;margin-bottom: 1%;" type="submit" id="save" class="boton" value="enviar" title="enviar" />
 
-                            </div>
-                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="mensajes">
                             <?php if($notificacion->mensajes){ ?>
@@ -125,6 +150,39 @@
                                         $("#mensajes").append(div);
                                     });
                                     document.getElementById("final").scrollIntoView();
+
+                                }
+                                /*$("#res").html("");
+                                if(res=="error"){
+                                    $("#res").html("Debe completar el formulario</br>");
+                                }else{
+                                    $("#cargar").html(res);
+                                }*/
+
+                            }
+                            });
+                        });
+                        
+                        
+                        $( "#formulario_presupuesto" ).submit(function( event ) {
+                            event.preventDefault();
+                            $.ajax({
+                            type: "POST",
+                            url: "<?= base_url() ?>productos_clientes/ajax_insertar_presupuesto_notificacion",
+                            dataType: "json",
+                            data: $("#formulario_presupuesto").serialize(),
+                            beforeSend:function(){
+                                
+
+                            },success: function(json) {
+                               
+                                if( json.results[0]){
+                                        var div= document.createElement('div');
+                                        $(div).attr('style', 'background: #fff none repeat scroll 0% 0%;padding: 10px 8px;border-bottom: 1px dotted #CCC;');
+                                        
+                                        $(div).append('Presupuesto enviado');
+                                        $("#divPresupuesto").append(div);
+                                    
 
                                 }
                                 /*$("#res").html("");
