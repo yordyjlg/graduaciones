@@ -81,7 +81,7 @@
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                         <input type="hidden" value="<?=$notificacion->idNotificacion ?>" name="idnotifi" >
                                         <input style="width: 20%; margin-top: 1%;margin-bottom: 1%;" type="submit" id="save" class="boton" value="enviar" title="enviar" />
-
+ 
                                     </div>
                                 </div>
                             </div>

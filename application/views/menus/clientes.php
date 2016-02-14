@@ -85,7 +85,7 @@
                         $(div1).append(div2);
                         $(div1).append(div3);
                         $(a1).append(div1);
-                        $("#recargado").append(a1);
+                        $("#recargado").append(a1); 
                     });
 		//document.getElementById(divid).innerHTML=xmlHttp.responseText;
 		setTimeout(function(){refreshDivs(divid,secs,url);},secs*1000);

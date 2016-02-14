@@ -69,8 +69,10 @@
 		xmlHttp.onreadystatechange=function(){
 		if(xmlHttp.readyState == 4 && xmlHttp.status == 200){
                     var json = JSON.parse(xmlHttp.responseText);
+                    //numero de notificaciones
                     $(".burbuja").html(json.results[0][0].num_notifi);
                     $("#recargado").html("");
+                    //notificaciones de productos
                     $.each(json.results[0][1].notificaciones, function(i, result){//border-bottom: 1px dotted #CCC;cursor:pointer;
                         var a1= document.createElement('a');
                         $(a1).attr('href','<?= base_url() ?>productos/presupuesto_producto/'+result['idNotificacion']);
@@ -87,6 +89,26 @@
                         $(a1).append(div1);
                         $("#recargado").append(a1);
                     });
+                    
+                    //notificaciones solicitud de presupuesto
+                    
+                    $.each(json.results[0][2].ntf_s_presupuesto, function(i, result){//border-bottom: 1px dotted #CCC;cursor:pointer;
+                        var a1= document.createElement('a');
+                        $(a1).attr('href','<?= base_url() ?>productos/ver_presupuesto_paquetes/'+result['idsolicitud_presupuesto']);
+                        $(a1).attr('style', 'border-bottom: 4px dotted #fff;margin-bottom:10px;box-shadow: 0px 1px 2px #695E5E;text-align: center;');
+                        var div1= document.createElement('div');
+                            $(div1).attr('style', 'width:100%; word-wrap: break-word;white-space: initial;');
+                        var div2= document.createElement('div');
+                            $(div2).html('<label  style="font-weight: 700;cursor:pointer;" >Presupuesto:</label></br><label  style="font-weight: 300;cursor:pointer;" >'+result['nombre']+'</label>');
+                        var div3= document.createElement('div');
+                            $(div3).html('<label  style="font-weight: 700;cursor:pointer;" >Graduandos:</label> <label  style="font-weight: 300;cursor:pointer;" >'+result['numero_graduandos']+'</label>');
+                        
+                        $(div1).append(div2);
+                        $(div1).append(div3);
+                        $(a1).append(div1); 
+                        $("#recargado").append(a1);
+                    });
+                    
 		//document.getElementById(divid).innerHTML=xmlHttp.responseText;
 		setTimeout(function(){refreshDivs(divid,secs,url);},secs*1000);
 		}

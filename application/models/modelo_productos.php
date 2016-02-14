@@ -269,9 +269,14 @@ class modelo_productos extends CI_Model
             $this->db->where('idNotificacion', $idntf);
             return $this->db->update('notificacion', $data);
         }
+        function insertar_presupuesto_sol_presupuesto($idntf,$data) {
+            
+            $this->db->where('idsolicitud_presupuesto', $idntf);
+            return $this->db->update('solicitud_presupuesto', $data);
+        }
         function get_datos_presupuesto_paquetes($id){
            
-            $campos = array (
+            $campos = array ( 
 				"*"
  		);
                 $data = $this->db->select($campos)

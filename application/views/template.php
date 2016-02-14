@@ -8,7 +8,7 @@
                 <meta name="viewport" content="width=device-width, initial-scale=1">
                 <link href="<?= base_url() ?>bootstrap/css/bootstrap.min.css" rel="stylesheet">
                 <link href="data:text/css;charset=utf-8," data-href="<?= base_url() ?>bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" id="bs-theme-stylesheet">
-                
+                <script src="<?= base_url() ?>bootstrap/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
                 
                 <link rel="stylesheet" href="<?= base_url() ?>css/style.css" type="text/css" media="all">
 		<link rel="stylesheet" href="<?= base_url() ?>css/style_menu1.css" type="text/css" media="screen">

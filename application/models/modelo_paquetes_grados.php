@@ -43,12 +43,22 @@ class modelo_paquetes_grados extends CI_Model
             return $res;
         }
         function get_productos_paquete($id){
-            $this->db->where('idpaquetes_grados',$id);
-            $this->db->where('grados_idpaquetes_grados=idpaquetes_grados');
-            $this->db->where('almacen_idalmacen=idalmacen');
-            $query=$this->db->get('paquetes_grados,almacen,productos_pqt');
-            if($query->num_rows()>0){
-                foreach ($query->result() as $fila){
+            
+            $campos = array ( 
+				"*"
+ 		);
+                $data = $this->db->select($campos)
+		->distinct()
+		->from('paquetes_grados as pqtg')
+                ->join('productos_pqt AS propqt', 'propqt.grados_idpaquetes_grados = pqtg.idpaquetes_grados', 'LEFT')
+                ->join('almacen AS almacen', 'almacen.idalmacen = propqt.almacen_idalmacen', 'LEFT')
+                
+                ->where ('pqtg.idpaquetes_grados', $id)
+                ->get()
+                ->result();
+            
+            if($data){
+                foreach ($data as $fila){
                     $data[]=$fila;
                 }
                 return $data;

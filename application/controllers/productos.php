@@ -268,8 +268,11 @@ class productos extends CI_Controller
             $numNotifica = $this->modelo_productos->contar_todas_notificaciones();
             $numSolicitud_presupuesto = $this->modelo_productos->contar_todas_notificaciones_solicitud_presupuesto();
             $total = $numNotifica+$numSolicitud_presupuesto;
+            
+            
             $json = '{"results":[[{"num_notifi":"'.$total.'"},'
-    . '{"notificaciones":'.json_encode($this->modelo_productos->get_notificaciones()).'}]]}';//
+                  . '{"notificaciones":'.json_encode($this->modelo_productos->get_notificaciones()).'},'
+                  . '{"ntf_s_presupuesto":'.json_encode($this->modelo_productos->get_notificaciones_solicitud_presupuesto()).'}]]}';
             echo $json;
             exit;
     }
@@ -312,6 +315,37 @@ class productos extends CI_Controller
             $this->load->view("template",$data);
         }
     
+        function ver_presupuesto_paquetes($id=null)
+        {
+            if($this->session->userdata('perfil') == FALSE || $this->session->userdata('perfil') != '666')
+            {
+                redirect(base_url().'inicio');
+            }
+            
+            $data['presupuesto_paquetes'] = $this->modelo_productos->get_datos_presupuesto_paquetes($id);
+            $data['productos']=$this->modelo_paquetes_grados->get_productos_paquete($data['presupuesto_paquetes']->idpaquetes_grados);
+            $data['id_paquete']=$id;
+            $data['menu']='menus/administrador'; 
+            $data['contenido']='administrador/ver_presupuesto_paquetes'; 
+            $this->load->view("template",$data);
+            
+        } 
+        
+        function ajax_insert_presupuesto(){
+            if(!$this->input->is_ajax_request()){
+                    return false;
+            }
+            $presupuesto= $this->input->post("presupuesto_bs");
+            $id= $this->input->post("idnotifi");
+            $data =array(
+                'estatus' => 'ENVIADOADMIN',
+                'bs' => $presupuesto
+            );
+            $response = $this->modelo_productos->insertar_presupuesto_sol_presupuesto($id,$data);
+            $json = '{"results":['.json_encode($response).']}';
+            echo $json;
+            exit;
+        }
     
 }
 

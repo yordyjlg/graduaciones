@@ -308,6 +308,8 @@ class productos_clientes extends CI_Controller
             echo $json;
             exit;
         }
+        
+        
        
 }
 
