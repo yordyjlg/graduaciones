@@ -1,7 +1,7 @@
 <div id="cargar">
          <div id="error"></div>
 
-                     <script src="<?= base_url() ?>bootstrap/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+                <script src="<?= base_url() ?>bootstrap/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
                 <script src="<?= base_url() ?>bootstrap/js/bootstrap.min.js"></script>
                 <script src="<?= base_url() ?>js/jquery-1.7.1.min.js" type="text/javascript"></script>
                 <script src="<?= base_url() ?>js/jquery-ui-1.8.21.custom.min.js" type="text/javascript"></script>

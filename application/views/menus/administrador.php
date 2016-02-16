@@ -141,7 +141,7 @@
                     <li><a href="#"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Core Templates"/>Registrar</a>
                         <ul id="submenu" >
                             <li><a href="<?= base_url() ?>universidad/paquetes_universidad"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Core Templates"/>Paquete universidad</a>
-                            <li><a href="#"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Core Templates"/>Universidad</a>
+                            <li><a href="<?= base_url() ?>universidad"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Core Templates"/>Universidad</a>
                             <li><a href="<?= base_url() ?>almacen"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Core Templates"/>productos de paquetes</a>
                         </ul>
                     </li>

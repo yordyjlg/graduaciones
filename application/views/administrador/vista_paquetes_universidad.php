@@ -1,4 +1,4 @@
-<div id="cargar">
+<div id="cargar" class="row col-lg-12" >
     <div id="res"></div>
 <form id="form_usuario" name="formulario"   method="post" >
     <div class="row">
