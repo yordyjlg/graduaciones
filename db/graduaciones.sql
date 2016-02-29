@@ -3,8 +3,8 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-01-2016 a las 13:23:20
--- Versión del servidor: 5.5.27
+-- Tiempo de generación: 29-02-2016 a las 00:24:43
+-- Versión del servidor: 5.5.27-log
 -- Versión de PHP: 5.4.7
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
@@ -415,20 +415,23 @@ CREATE TABLE IF NOT EXISTS `universidad` (
   `NombreUniversidad` varchar(45) DEFAULT NULL,
   `direccion` varchar(45) DEFAULT NULL,
   `Paquete_idPaquete` int(11) DEFAULT NULL,
+  `estado` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`idUniversidad`),
   KEY `fk_Universidad_Paquete1_idx` (`Paquete_idPaquete`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 --
 -- Volcado de datos para la tabla `universidad`
 --
 
-INSERT INTO `universidad` (`idUniversidad`, `NombreUniversidad`, `direccion`, `Paquete_idPaquete`) VALUES
-(4, 'UPTNMLS', 'CARIPITO', NULL),
-(5, 'UPT PUNTA DE MATA', 'PUNTA DE MATA', NULL),
-(6, 'UDO', 'MATURIN', NULL),
-(8, 'UBV', 'CARUPANO', NULL),
-(9, 'NOSE', 'NOSE', NULL);
+INSERT INTO `universidad` (`idUniversidad`, `NombreUniversidad`, `direccion`, `Paquete_idPaquete`, `estado`) VALUES
+(4, 'UPTNMLS', 'CARIPITO', NULL, 1),
+(5, 'UPT PUNTA DE MATA', 'PUNTA DE MATA', NULL, 1),
+(6, 'UDO', 'MATURIN', NULL, 1),
+(8, 'UBV', 'CARUPANO', NULL, 1),
+(9, 'NOSEe', 'NOSE', NULL, 1),
+(10, 'prueba', 'prueba', NULL, 1),
+(11, 'prueba1', 'prueba1', NULL, 1);
 
 -- --------------------------------------------------------
 

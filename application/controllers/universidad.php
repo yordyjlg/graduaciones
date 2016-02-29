@@ -36,14 +36,26 @@ class universidad extends CI_Controller
             {
                 redirect(base_url().'inicio');
             }
+            
             $page = (int)$this->input->post('page', true);  // Almacena el numero de pagina actual
             $limit = (int)$this->input->post('rows', true); // Almacena el numero de filas que se van a mostrar por pagina
             $sidx = $this->input->post('sidx', true);  // Almacena el indice por el cual se hará la ordenación de los datos
             $sord = $this->input->post('sord', true);// Almacena el modo de ordenación
- 
+            
+            $filtro =array( );
+            if($this->input->post('nombre')){
+                $filtro["nombre"]=$this->input->post('nombre');
+            }
+            if($this->input->post('direccion')){
+                $filtro["direccion"]=$this->input->post('direccion');
+            }
+            if($this->input->post('estado')){
+                $filtro["estado"]=$this->input->post('estado');
+            }
+            
             if(!$sidx) $sidx =1;
             // Se hace una consulta para saber cuantos registros se van a mostrar
-            $contar_presupuestos = $this->modelo_universidad->contar_universidedes();
+            $contar_presupuestos = $this->modelo_universidad->contar_universidedes($filtro);
             $count = ( !empty($contar_presupuestos) && count($contar_presupuestos) > 0 ? count($contar_presupuestos) : 0 );
 
             //En base al numero de registros se obtiene el numero de paginas
@@ -72,9 +84,40 @@ class universidad extends CI_Controller
             $i=0;
             
             foreach ($result AS $i => $row) {
-                $hidden_options = '<a href="'.base_url("productos_clientes/ver_presupuesto_paquetes/".$row["idUniversidad"]).'" class="btn btn-block btn-outline btn-primary" style="background-color: #3DB6E3;border-color: #359FC8;">Modificar</a>';
+                $modal = "<div class='text-align:center;'>";
+                
+                $modal_bottom = '';
+                if ($row["estado"] == 1)//activa
+                {
+                    $estado = 'Activo' ;
+                    $modal_bottom .= '<a href="#" class="btn btn-block btn-primary btn_activar" data-id="'.$row["idUniversidad"].'" data-estado="'.$row["estado"].'" style="color:white; background-color: #3DB6E3;border-color: #359FC8;">Inactivar</a>';
+                }else
+                {
+                    $estado = 'Inactivo' ;
+                    $modal_bottom .= '<a href="#" class="btn btn-block btn-primary btn_activar" data-id="'.$row["idUniversidad"].'" data-estado="'.$row["estado"].'" style="color:white; background-color: #3DB6E3;border-color: #359FC8;">Activar</a>';
+                }
+                $paquete='';
+                if(!$row["Paquete_idPaquete"]){
+                    $paquete='No Asignado';
+                }
+                $modal_bottom .= '<a href="#" class="btn btn-block btn-primary btn_editar" data-id="'.$row["idUniversidad"].'" data-nombre="'.$row["NombreUniversidad"].'" data-direccion="'.$row["direccion"].'" style="color:white; background-color: #3DB6E3;border-color: #359FC8;">Editar</a>';
+                $modal .= '<a href="#" style="color:white;background-color: #3DB6E3;border-color: #359FC8;" data-toggle="modal" data-target="#myModaluniversidad'.$row["idUniversidad"].'" class="btn btn-block btn-outline btn-primary">Opciones</a>';
+                $modal .= '<div class="modal fade" id="myModaluniversidad'.$row["idUniversidad"].'" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog" role="document" style="width:300px;">
+                                    <div class="modal-content">
+                                            <div class="modal-header">
+                                                    <button type="button" style="font-size:21px;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabelsucursal'.$row["idUniversidad"].'">Opciones de '.$row["NombreUniversidad"].'</h4>
+                                            </div>
+                                            <div class="modal-body" style="padding-left:30px;padding-right:30px;">
+                                                '.$modal_bottom.'
+                                             </div>
+                                    </div>
+                            </div>
+                    </div>';
+                $modal .= "</div>";
                 $respuesta->rows[$i]['id']=$row["idUniversidad"];
-                $respuesta->rows[$i]['cell']=array($row["idUniversidad"],$row["NombreUniversidad"],$row["direccion"],$hidden_options);
+                $respuesta->rows[$i]['cell']=array($row["idUniversidad"],$row["NombreUniversidad"],$row["direccion"],$paquete,$estado,$modal);
                 $i++;
             }
 
@@ -105,22 +148,72 @@ class universidad extends CI_Controller
                 return;
                 
             }else{
-                $res = $this->modelo_universidad->insertar_universidad($nombre,$direccion);
-                if($res){
-                    $respuesta->clase="alert-success";
-                    $respuesta->respuest="Guardado correctamente";
-                    echo json_encode($respuesta);
-                    return;
+                if($this->input->post("iduniversidad")){
+                    $data=array(
+                        "NombreUniversidad" => $nombre,
+                        "direccion" => $direccion
+                    );
+                    $res = $this->modelo_universidad->modificar_universidedes($data,$this->input->post("iduniversidad"));
+                    if($res){
+                        $respuesta->clase="alert-success";
+                        $respuesta->respuest="Modificado Correctamente";
+                        echo json_encode($respuesta);
+                        return;
+                    }else{
+                        $respuesta->clase="alert-danger";
+                        $respuesta->respuest="Error al Modificar";
+                        echo json_encode($respuesta);
+                        return;
+                    }
                 }else{
-                    $respuesta->clase="alert-danger";
-                    $respuesta->respuest="Error al guardar";
-                    echo json_encode($respuesta);
-                    return;
+                    $res = $this->modelo_universidad->insertar_universidad($nombre,$direccion);
+                    if($res){
+                        $respuesta->clase="alert-success";
+                        $respuesta->respuest="Guardado Correctamente";
+                        echo json_encode($respuesta);
+                        return;
+                    }else{
+                        $respuesta->clase="alert-danger";
+                        $respuesta->respuest="Error al Guardar";
+                        echo json_encode($respuesta);
+                        return;
+                    }
                 }
+                
             }
         }
         
+        public function ajax_activar(){
+            if($this->session->userdata('perfil') == FALSE || $this->session->userdata('perfil') != '666')
+            {
+                redirect(base_url().'inicio');
+            }
+            $respuesta = new stdClass();
+            if($this->input->post("id")){
+                
+                if($this->input->post("estado")==1){
+                    $estado=0;
+                }else{
+                    $estado=1;
+                }
+                $data=array(
+                        "estado" => $estado
+                    );
+                    $res = $this->modelo_universidad->modificar_universidedes($data,$this->input->post("id"));
+                    if($res){
+                        $respuesta->success=true;
+                        echo json_encode($respuesta);
+                        return;
+                    }else{
+                        $respuesta->success=false;
+                        echo json_encode($respuesta);
+                        return;
+                    }
+            }
+        }
+
         
+
         public function paquetes_universidad()
 	{
             if($this->session->userdata('perfil') == FALSE || $this->session->userdata('perfil') != '666')

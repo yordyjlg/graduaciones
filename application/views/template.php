@@ -48,7 +48,7 @@
         return window.twttr || (t = { _e: [], ready: function(f){ t._e.push(f) } });
       }(document, "script", "twitter-wjs"));
     </script> -->
-                <script src="<?= base_url() ?>bootstrap/js/docs.min.js"></script>
+                
                 <script src="<?= base_url() ?>bootstrap/js/ie10-viewport-bug-workaround.js"></script>
                 <script src="<?= base_url() ?>js/url.js"></script>
 

@@ -11,11 +11,46 @@
                 <link rel="stylesheet" href="<?= base_url() ?>css/bootstrap-progressbar-2.3.2.css" type="text/css" media="screen">
                 <link rel="stylesheet" href="<?= base_url() ?>css/jquery-ui-1.8.16.custom.css" type="text/css" media="screen">
                 <link rel="stylesheet" href="<?= base_url() ?>css/ui.jqgrid.css" type="text/css" media="screen">
+                <style>
+                    /*Acordeon con cambio de estado con base de Bootstrap */
+
+                    .accordion-group .accordion-heading:after {
+                            background: #3DB6E3;
+                        }
+
+                    .accordion-group {
+                            border: 1px solid #DDD;
+                            background:  #fff;
+                            color: #444;
+                            font-weight: bold;
+
+                        }
+
+                    .accordion{margin-bottom:20px;}
+                    .accordion-group{margin-bottom:2px;border:1px solid #e5e5e5;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;}
+                    .accordion-heading{border-bottom:0;}
+                    .accordion-heading .accordion-toggle{display:block;padding:8px 15px;}
+                    .accordion-toggle{cursor:pointer;}
+                    .accordion-inner{padding:9px 15px;border-top:1px solid #e5e5e5;}
+
+                    .accordion-body{-webkit-transition:"height .4s linear";-moz-transition:"height .4s linear";-o-transition:"height .4s linear";transition:"height .4s linear";}
+                    .accordion-group{border:none;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;margin-bottom:5px;}
+                    .accordion-group .accordion-heading{position:relative;}
+
+                    /*Control del cambio de estado */
+                    .accordion-group .accordion-heading:after{pointer-events:none;color:#fff;content:"+";font-size:15px;padding:8px 13px;position:absolute;top:0;right:0;bottom:auto auto;left:auto;}
+                    .accordion-group .accordion-heading.accordion-opened:after{content:"-";padding:8px 15px;}
+
+
+                    .accordion-group a{color:#231f20;}
+                    .accordion-group a:hover{text-decoration:none;}
+                    .accordion-group .accordion-inner{border:none;padding:20px;}
+                </style>
                 
                 <form id="form_universidad" name="formulario"   method="post" >
                     <div id="res"></div>
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-5 col-md-5">
+                    <div class="row" style="padding-left: 5%;padding-right: 5%;">
+                        <div class="col-xs-12 col-sm-5 col-md-5 form_input" >
                             <div class="form-group">
                                 <label class="control-label" for="nombrep">Nombre:</label>
                                 <div class="input-group">
@@ -24,7 +59,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-5 col-md-5">
+                        <div class="col-xs-12 col-sm-5 col-md-5 form_input">
                             <div class="form-group">
                                 <label  class="control-label" for="informacionp" >Dirección:</label>
                                     <div class="input-group">
@@ -33,31 +68,115 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-2 col-md-2">
+                        <div class="col-xs-12 col-sm-2 col-md-2 form_btn">
                             <div class="form-group">
                                 <label style="color: transparent;" class="control-label" for="informacionp" >Dirección:</label>
-                                <input style="width: 90%; margin-top: 1%;margin-bottom: 1%;" type="submit" id="save" class="boton" value="enviar" title="enviar" />
+                                <input type="hidden" name="iduniversidad" id="iduniversidad" value="0" >
+                                <input style="width: 90%; margin-top: 1%;margin-bottom: 1%;" type="submit" id="crear" class="boton" value="Crear" title="Crear"  />
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-2 col-md-2 form_btn_canc" style="display: none;">
+                            <div class="form-group">
+                                <label style="color: transparent;" class="control-label" for="informacionp" >Dirección:</label>
+                                <input style="width: 90%; margin-top: 1%;margin-bottom: 1%;padding: 0px;" type="submit" id="cancelar" class="boton" value="Cancelar" title="Cancelar" />
                             </div>
                         </div>
 
                     </div>
                 </form>
                 
+                <div class="container-fluid" style="margin-top: 40px;">
+                    <div class="accordion" id="accordion2">
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" href="#collapseOne" data-toggle="collapse" data-parent="#accordion2">
+                                    Filtrar.
+                                </a></div>
+                            <div class="accordion-body collapse" id="collapseOne" style="height: 0px;">
+                                <div class="accordion-inner">
+                                    <form id="form_filtro_universidad" name="formulario"   method="post" >
+                    
+                                            <div class="row" style="padding-left: 5%;padding-right: 5%;">
+                                                <div class="col-xs-12 col-sm-5 col-md-4 " >
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="filtro_nombreu">Nombre:</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"></span>
+                                                            <input type="text" class="form-control filtro_nombreu" placeholder="Nombre" id="filtro_nombreu" name="filtro_nombreu"  />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-5 col-md-4 ">
+                                                    <div class="form-group">
+                                                        <label  class="control-label" for="filtro_direccionu" >Dirección:</label>
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon"></span>
+                                                                <input type="text" class="form-control filtro_direccionu" placeholder="Dirección" id="filtro_direccionu"  name="filtro_direccionu"  />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm4 col-md-4 ">
+                                                    <div class="form-group">
+                                                        <label  class="control-label" for="filtro_estado" >Estado:</label>
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon"></span>
+                                                                <select id="filtro_estado" name="filtro_estado" class="form-control">
+                                                                    <option value="">SELECCIONE</option>
+                                                                    <option value="1">Activos</option>
+                                                                    <option value="0">inactivos</option>
+                                                                </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-8 col-md-8 "></div>
+                                                <div class="col-xs-12 col-sm-2 col-md-2 ">
+                                                    <div class="form-group">
+                                                        <label style="color: transparent;" class="control-label" for="filtro" >Dirección:</label>
+                                                        <input style="width: 90%; margin-top: 1%;margin-bottom: 1%;" type="submit" id="filtro" class="boton" value="Filtrar" title="Filtrar"  />
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-2 col-md-2 " >
+                                                    <div class="form-group">
+                                                        <label style="color: transparent;" class="control-label" for="cancelar_filtro" >Dirección:</label>
+                                                        <input style="width: 90%; margin-top: 1%;margin-bottom: 1%;padding: 0px;" type="submit" id="cancelar_filtro" class="boton" value="Cancelar" title="Cancelar" />
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <table id="universidades"></table>
                 <div id="paginacion"> </div>
 
 <script type="text/javascript">
+     $(function() {
+        $(".accordion").click(function(event) {
+                if($(".accordion-heading")[0].className=="accordion-heading accordion-opened"){
+                    $(".accordion-heading").removeClass('accordion-opened')
+                }else{
+                    $(".accordion-heading").addClass('accordion-opened');
+                }
+        });
+
+    });
 $(document).ready(function(){
            jQuery("#universidades").jqGrid({
                     url:'<?= base_url() ?>universidad/ajax_tabla_universidad', 
                     datatype: 'json',
                     mtype: 'POST',
-                    colNames:['ID','Nombre', 'Dirección','Modificar'],
+                    colNames:['ID','Nombre', 'Dirección','Paquete','Estado','Opciones'],
                     colModel:[
-                        {name:'idUniversidad', index:'idUniversidad', width:50, resizable:true, align:"center"},
+                        {name:'idUniversidad', index:'idUniversidad', width:20, resizable:true, align:"center"},
                         {name:'NombreUniversidad', index:'NombreUniversidad', width:160,resizable:true, sortable:true, align:"center"},
                         {name:'direccion', index:'direccion', resizable:true, width:50, align:"center"},
-                        {name:'ver', index:'ver', resizable:true, width:40, align:"center"}
+                        {name:'Paquete_idPaquete', index:'Paquete_idPaquete', resizable:true, width:50, align:"center"},
+                        {name:'estado', index:'estado', resizable:true, width:50, align:"center"},
+                        {name:'ver',  sortable: false, title:false, resizable:true, width:50,height:10}
                     ],
                     height: "auto",
                     autowidth: true,
@@ -87,7 +206,7 @@ $(document).ready(function(){
         
         
         $(document).ready(function() {
-            $("#save").click(function(event) {
+            $("#crear").click(function(event) {
                 event.preventDefault();
                 $.ajax({
                     type: "POST",
@@ -101,6 +220,7 @@ $(document).ready(function(){
                         $("#res").html('<div id="success-alert" class="alert '+respuesta.clase+'"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'+respuesta.respuest+'</div>');
                         $("#universidades").trigger("reloadGrid");
                         document.getElementById("form_universidad").reset();
+                        limpiar_campos();
                         $('html, body').animate({
                             scrollTop: $("#res").offset().top
                         }, 200);
@@ -108,4 +228,96 @@ $(document).ready(function(){
                 });
             });
         });
+        
+        $("#universidades").on("click",".btn_editar", function(e){
+            e.preventDefault();
+            var id = $(this).data("id");
+            var nombre = $(this).data("nombre");
+            var direcion = $(this).data("direccion");
+            $(".form_input").attr("class","col-xs-12 col-sm-4 col-md-4 form_input");
+            $(".form_btn_canc").css("display", "block");
+            $("#myModaluniversidad" + id).find(".close").trigger('click');
+            //var estado = $(this).data("estado");
+            //proceso de visualizacion iduniversidad
+            $("#crear").attr("title", "Guardar");
+            $("#crear").val("Guardar");
+            
+            $("#iduniversidad").val(id);
+            $("#nombreu").val(nombre);
+            $("#direccionu").val(direcion);
+        });
+        $("#cancelar").click(function(event) {
+            event.preventDefault();
+            limpiar_campos();
+        });
+        $("#universidades").on("click",".btn_activar", function(e){
+            e.preventDefault();
+            var id = $(this).data("id");
+            var estado = $(this).data("estado");
+            $.ajax({
+                url: '<?= base_url() ?>universidad/ajax_activar/',
+                data: {
+                id: id,
+                estado: estado,
+                },
+                type:'post',
+                dataType: 'json',
+            })
+            .done(function(data) { // Variable data contains the data we get from serverside
+                if(data.success === true)
+                {
+                    $("#myModaluniversidad" + id).find(".close").trigger('click');
+                    setTimeout(function(){
+                    $("#universidades").trigger("reloadGrid");
+                    }, 1500);
+                }
+                else
+                {
+                    $("#myModaluniversidad" + id).find(".close").trigger('click');
+                    alert("Error! Comuniquelo con el administrador");
+                }
+            });
+        });
+        function limpiar_campos(){
+            $(".form_input").attr("class","col-xs-12 col-sm-5 col-md-5 form_input");
+            $(".form_btn_canc").css("display", "none");
+            $("#crear").attr("title", "Crear");
+            $("#crear").val("Crear");
+            
+            $("#iduniversidad").val("0");
+            $("#nombreu").val("");
+            $("#direccionu").val("");
+        }
+        $("#filtro").click(function(event) {
+            event.preventDefault();
+            console.log("hola");
+            var nombre = $('#filtro_nombreu').val();
+            var direccion = $('#filtro_direccionu').val();
+            var estado = $('#filtro_estado').val();
+            if(nombre != "" || direccion != "" || estado != "")
+            {
+                //Reload Grid
+                $("#universidades").setGridParam({
+                url:'<?= base_url() ?>universidad/ajax_tabla_universidad',
+                datatype: "json",
+                postData: {
+                    nombre: nombre,
+                    direccion: direccion,
+                    estado: estado
+                }
+                }).trigger('reloadGrid');
+            }
+            else{
+                $("#universidades").setGridParam({
+                url: '<?= base_url() ?>universidad/ajax_tabla_universidad',
+                datatype: "json",
+                postData: {
+                    nombre: "",
+                    direccion: "",
+                    estado: ""
+                }
+                }).trigger('reloadGrid');
+            }
+        });
+        
 </script>

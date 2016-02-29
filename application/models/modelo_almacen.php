@@ -25,6 +25,32 @@ class modelo_almacen extends CI_Model
                 return false;
             }
         }
+        function contar_productos($filtro){
+             $campos = array (
+				"*"
+ 		);
+             
+            return $this->db->select($campos)
+		->distinct()
+		->from('almacen')
+                 ->get()
+                ->result_array();
+            //return $this->db->last_query();
+        }
+        function tabla_productos( $sidx = 1, $sord = 1, $limit = 0, $start = 0){
+           
+            $campos = array (
+				"*"
+ 		);
+                return $this->db->select($campos)
+		->distinct()
+		->from('almacen')
+                ->order_by($sidx, $sord)
+                ->limit($limit, $start)
+                ->get()
+                ->result_array();
+       
+          }
         function insertar_productos($nombre,$cantidad,$precio){
             $data=array(
                 'nombre_producto' => $nombre,

@@ -25,26 +25,23 @@ class modelo_universidad extends CI_Model
                 return false;
             }
         }
-        function modificar_universidedes($campo,$valor,$id){
-            
-                $data=array(
-                    $campo => $valor
-                    
-                );
-            
+        function modificar_universidedes($data,$id){
             
             $this->db->where('idUniversidad', $id);
-            return$this->db->update('universidad', $data);
+            return $this->db->update('universidad', $data);
         }
         
-        function contar_universidedes(){
+        function contar_universidedes($filtro){
              $campos = array (
 				"*"
  		);
+             if(isset($filtro["nombre"])){
+                 $this->db->where('NombreUniversidad', $filtro["nombre"]);
+             }
             return $this->db->select($campos)
 		->distinct()
 		->from('universidad')
-                ->get()
+                 ->get()
                 ->result_array();
             //return $this->db->last_query();
         }
