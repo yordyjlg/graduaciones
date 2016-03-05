@@ -11,6 +11,7 @@
                 <link rel="stylesheet" href="<?= base_url() ?>css/bootstrap-progressbar-2.3.2.css" type="text/css" media="screen">
                 <link rel="stylesheet" href="<?= base_url() ?>css/jquery-ui-1.8.16.custom.css" type="text/css" media="screen">
                 <link rel="stylesheet" href="<?= base_url() ?>css/ui.jqgrid.css" type="text/css" media="screen">
+                <link rel="stylesheet" href="<?= base_url() ?>css/filtro.css" type="text/css" media="screen">
 <div id="cargar">
     <div id="res"></div>
     <div id="form">
@@ -62,6 +63,63 @@
             </div>
     </form>
     </div>
+    
+    <div class="container-fluid" style="margin-top: 40px;">
+                    <div class="accordion" id="accordion2">
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" href="#collapseOne" data-toggle="collapse" data-parent="#accordion2">
+                                    Filtrar.
+                                </a></div>
+                            <div class="accordion-body collapse" id="collapseOne" style="height: 0px;">
+                                <div class="accordion-inner">
+                                    <form id="form_filtro_universidad" name="formulario"   method="post" autocomplete="off" >
+                    
+                                            <div class="row" style="padding-left: 5%;padding-right: 5%;">
+                                                <div class="col-xs-12 col-sm-5 col-md-4 " >
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="filtro_nombreu">Nombre:</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"></span>
+                                                            <input type="text" class="form-control filtro_nombreu" placeholder="Nombre" id="filtro_nombreu" name="filtro_nombreu"  />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-xs-12 col-sm4 col-md-4 ">
+                                                    <div class="form-group">
+                                                        <label  class="control-label" for="filtro_estado" >Estado:</label>
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon"></span>
+                                                                <select id="filtro_estado" name="filtro_estado" class="form-control">
+                                                                    <option value="">SELECCIONE</option>
+                                                                    <option value="1">Activos</option>
+                                                                    <option value="2">inactivos</option>
+                                                                </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-8 col-md-8 "></div>
+                                                <div class="col-xs-12 col-sm-2 col-md-2 ">
+                                                    <div class="form-group">
+                                                        <label style="color: transparent;" class="control-label" for="filtro" >Dirección:</label>
+                                                        <input style="width: 90%; margin-top: 1%;margin-bottom: 1%;" type="submit" id="filtro" class="boton" value="Filtrar" title="Filtrar"  />
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-2 col-md-2 " >
+                                                    <div class="form-group">
+                                                        <label style="color: transparent;" class="control-label" for="cancelar_filtro" >Dirección:</label>
+                                                        <input style="width: 90%; margin-top: 1%;margin-bottom: 1%;padding: 0px;" type="submit" id="cancelar_filtro" class="boton" value="Cancelar" title="Cancelar" />
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
     <table id="tabla_productos"></table>
     <div id="paginacion"> </div>
 
@@ -178,6 +236,34 @@
                         event.preventDefault();
                         limpiar_campos();
                     });
+                    $("#tabla_productos").on("click",".btn_activar", function(e){
+                        e.preventDefault();
+                        var id = $(this).data("id");
+                        var estado = $(this).data("estado");
+                        $.ajax({
+                            url: '<?= base_url() ?>almacen/ajax_activar/',
+                            data: {
+                            id: id,
+                            estado: estado,
+                            },
+                            type:'post',
+                            dataType: 'json',
+                        })
+                        .done(function(data) { // Variable data contains the data we get from serverside
+                            if(data.success === true)
+                            {
+                                $("#myModaluniversidad" + id).find(".close").trigger('click');
+                                setTimeout(function(){
+                                $("#tabla_productos").trigger("reloadGrid");
+                                }, 1500);
+                            }
+                            else
+                            {
+                                $("#myModaluniversidad" + id).find(".close").trigger('click');
+                                alert("Error! Comuniquelo con el administrador");
+                            }
+                        });
+                    });
                     function limpiar_campos(){
                         $(".form_btn_canc").css("display", "none");
                         $("#modificar").attr("title", "Enviar");
@@ -190,4 +276,47 @@
                         $("#cantidad").val("");
                         $("#precio").val("");
                     }
+                    
+                     $("#filtro").click(function(event) {
+                        event.preventDefault();
+                        console.log("hola");
+                        var nombre = $('#filtro_nombreu').val();
+                        var estado = $('#filtro_estado').val();
+                        if(nombre != "" || estado != "")
+                        {
+                            //Reload Grid
+                            $("#tabla_productos").setGridParam({
+                            url:'<?= base_url() ?>almacen/ajax_tabla_almacen',
+                            datatype: "json",
+                            postData: {
+                                nombre: nombre,
+                                estado: estado
+                            }
+                            }).trigger('reloadGrid');
+                        }
+                        else{
+                            $("#tabla_productos").setGridParam({
+                            url: '<?= base_url() ?>almacen/ajax_tabla_almacen',
+                            datatype: "json",
+                            postData: {
+                                nombre: "",
+                                estado: ""
+                            }
+                            }).trigger('reloadGrid');
+                        }
+                    });
+
+                    $("#cancelar_filtro").click(function(event) {
+                        event.preventDefault();
+                        $('#filtro_nombreu').val("");
+                        $('#filtro_estado').val("");
+                        $("#tabla_productos").setGridParam({
+                            url: '<?= base_url() ?>almacen/ajax_tabla_almacen',
+                            datatype: "json",
+                            postData: {
+                                nombre: "",
+                                estado: ""
+                            }
+                            }).trigger('reloadGrid');
+                    });
                </script>

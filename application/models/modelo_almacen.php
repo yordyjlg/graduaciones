@@ -29,28 +29,49 @@ class modelo_almacen extends CI_Model
              $campos = array (
 				"*"
  		);
+             $result = $this->db
+                    ->select($campos)
+                    ->distinct()
+		    ->from('almacen');
+             $result = $this->filtro_productos($filtro);
              
-            return $this->db->select($campos)
-		->distinct()
-		->from('almacen')
-                 ->get()
-                ->result_array();
+             $result = $this->db
+                    ->get()
+                    ->result_array();
+            return $result;
             //return $this->db->last_query();
         }
-        function tabla_productos( $sidx = 1, $sord = 1, $limit = 0, $start = 0){
+        function tabla_productos($filtro, $sidx = 1, $sord = 1, $limit = 0, $start = 0){
            
             $campos = array (
 				"*"
  		);
-                return $this->db->select($campos)
-		->distinct()
-		->from('almacen')
-                ->order_by($sidx, $sord)
-                ->limit($limit, $start)
-                ->get()
-                ->result_array();
+            $result = $this->db
+                    ->select($campos)
+                    ->distinct()
+		    ->from('almacen');
+             $result = $this->filtro_productos($filtro);
+             
+             $result = $this->db
+                    ->order_by($sidx, $sord)
+                    ->limit($limit, $start)
+                    ->get()
+                    ->result_array();
+            return $result;
        
           }
+          function filtro_productos($filtro){
+            if(isset($filtro["nombre"])){
+                 $this->db->like('nombre_producto', $filtro["nombre"]);
+             }
+             
+             if(isset($filtro["estado"])){
+                 if($filtro["estado"]==2){
+                     $filtro["estado"]=0;
+                 }
+                 $this->db->where('estado', $filtro["estado"]);
+             }
+        }
         function insertar_productos($nombre,$cantidad,$precio){
             $data=array(
                 'nombre_producto' => $nombre,
@@ -86,5 +107,11 @@ class modelo_almacen extends CI_Model
             }else{
                 return false;
             }
+        }
+        
+        function modificar_productos($data,$id){
+            
+            $this->db->where('idalmacen', $id);
+            return $this->db->update('almacen', $data);
         }
 }

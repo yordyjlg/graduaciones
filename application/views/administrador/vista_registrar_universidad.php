@@ -11,41 +11,7 @@
                 <link rel="stylesheet" href="<?= base_url() ?>css/bootstrap-progressbar-2.3.2.css" type="text/css" media="screen">
                 <link rel="stylesheet" href="<?= base_url() ?>css/jquery-ui-1.8.16.custom.css" type="text/css" media="screen">
                 <link rel="stylesheet" href="<?= base_url() ?>css/ui.jqgrid.css" type="text/css" media="screen">
-                <style>
-                    /*Acordeon con cambio de estado con base de Bootstrap */
-
-                    .accordion-group .accordion-heading:after {
-                            background: #3DB6E3;
-                        }
-
-                    .accordion-group {
-                            border: 1px solid #DDD;
-                            background:  #fff;
-                            color: #444;
-                            font-weight: bold;
-
-                        }
-
-                    .accordion{margin-bottom:20px;}
-                    .accordion-group{margin-bottom:2px;border:1px solid #e5e5e5;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;}
-                    .accordion-heading{border-bottom:0;}
-                    .accordion-heading .accordion-toggle{display:block;padding:8px 15px;}
-                    .accordion-toggle{cursor:pointer;}
-                    .accordion-inner{padding:9px 15px;border-top:1px solid #e5e5e5;}
-
-                    .accordion-body{-webkit-transition:"height .4s linear";-moz-transition:"height .4s linear";-o-transition:"height .4s linear";transition:"height .4s linear";}
-                    .accordion-group{border:none;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;margin-bottom:5px;}
-                    .accordion-group .accordion-heading{position:relative;}
-
-                    /*Control del cambio de estado */
-                    .accordion-group .accordion-heading:after{pointer-events:none;color:#fff;content:"+";font-size:15px;padding:8px 13px;position:absolute;top:0;right:0;bottom:auto auto;left:auto;}
-                    .accordion-group .accordion-heading.accordion-opened:after{content:"-";padding:8px 15px;}
-
-
-                    .accordion-group a{color:#231f20;}
-                    .accordion-group a:hover{text-decoration:none;}
-                    .accordion-group .accordion-inner{border:none;padding:20px;}
-                </style>
+                <link rel="stylesheet" href="<?= base_url() ?>css/filtro.css" type="text/css" media="screen">
                 
                 <form id="form_universidad" name="formulario"   method="post" >
                     <div id="res"></div>
@@ -94,7 +60,7 @@
                                 </a></div>
                             <div class="accordion-body collapse" id="collapseOne" style="height: 0px;">
                                 <div class="accordion-inner">
-                                    <form id="form_filtro_universidad" name="formulario"   method="post" >
+                                    <form id="form_filtro_universidad" name="formulario"   method="post" autocomplete="off" >
                     
                                             <div class="row" style="padding-left: 5%;padding-right: 5%;">
                                                 <div class="col-xs-12 col-sm-5 col-md-4 " >
@@ -123,7 +89,7 @@
                                                                 <select id="filtro_estado" name="filtro_estado" class="form-control">
                                                                     <option value="">SELECCIONE</option>
                                                                     <option value="1">Activos</option>
-                                                                    <option value="0">inactivos</option>
+                                                                    <option value="2">inactivos</option>
                                                                 </select>
                                                         </div>
                                                     </div>
@@ -318,6 +284,22 @@ $(document).ready(function(){
                 }
                 }).trigger('reloadGrid');
             }
+        });
+        
+        $("#cancelar_filtro").click(function(event) {
+            event.preventDefault();
+            $('#filtro_nombreu').val("");
+            $('#filtro_direccionu').val("");
+            $('#filtro_estado').val("");
+            $("#universidades").setGridParam({
+                url: '<?= base_url() ?>universidad/ajax_tabla_universidad',
+                datatype: "json",
+                postData: {
+                    nombre: "",
+                    direccion: "",
+                    estado: ""
+                }
+                }).trigger('reloadGrid');
         });
         
 </script>

@@ -35,30 +35,54 @@ class modelo_universidad extends CI_Model
              $campos = array (
 				"*"
  		);
-             if(isset($filtro["nombre"])){
-                 $this->db->where('NombreUniversidad', $filtro["nombre"]);
-             }
-            return $this->db->select($campos)
-		->distinct()
-		->from('universidad')
-                 ->get()
-                ->result_array();
+             $result = $this->db
+                    ->select($campos)
+                    ->distinct()
+		    ->from('universidad');
+             $result = $this->filtro_universidad($filtro);
+             
+             $result = $this->db
+                    ->get()
+                    ->result_array();
+            return $result;
             //return $this->db->last_query();
         }
         
-        function tabla_universidad( $sidx = 1, $sord = 1, $limit = 0, $start = 0){
+        function filtro_universidad($filtro){
+            if(isset($filtro["nombre"])){
+                 $this->db->like('NombreUniversidad', $filtro["nombre"]);
+             }
+             
+             if(isset($filtro["direccion"])){
+                 $this->db->like('direccion', $filtro["direccion"]);
+             }
+             
+             if(isset($filtro["estado"])){
+                 if($filtro["estado"]==2){
+                     $filtro["estado"]=0;
+                 }
+                 $this->db->where('estado', $filtro["estado"]);
+             }
+        }
+                
+        function tabla_universidad($filtro, $sidx = 1, $sord = 1, $limit = 0, $start = 0){
            
             $campos = array (
 				"*"
  		);
-                return $this->db->select($campos)
-		->distinct()
-		->from('universidad')
-                ->order_by($sidx, $sord)
-                ->limit($limit, $start)
-                ->get()
-                ->result_array();
-       
+            
+            $result = $this->db
+                    ->select($campos)
+                    ->distinct()
+		    ->from('universidad');
+             $result = $this->filtro_universidad($filtro);
+             
+             $result = $this->db
+                    ->order_by($sidx, $sord)
+                    ->limit($limit, $start)
+                    ->get()
+                    ->result_array();
+            return $result;
           }
           
           function insertar_universidad($nombre,$direecion){

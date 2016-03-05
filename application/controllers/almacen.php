@@ -47,9 +47,6 @@ class almacen extends CI_Controller
             if($this->input->post('nombre')){
                 $filtro["nombre"]=$this->input->post('nombre');
             }
-            if($this->input->post('direccion')){
-                $filtro["direccion"]=$this->input->post('direccion');
-            }
             if($this->input->post('estado')){
                 $filtro["estado"]=$this->input->post('estado');
             }
@@ -76,7 +73,7 @@ class almacen extends CI_Controller
             }
 
             
-            $result = $this->modelo_almacen->tabla_productos($sidx,$sord,$limit,$start);
+            $result = $this->modelo_almacen->tabla_productos($filtro,$sidx,$sord,$limit,$start);
             $respuesta = new stdClass(); 
             // Se agregan los datos de la respuesta del servidor
             $respuesta->page = 1;
@@ -121,6 +118,35 @@ class almacen extends CI_Controller
 
             // La respuesta se regresa como json
             echo json_encode($respuesta);
+        }
+        
+        public function ajax_activar(){
+            if($this->session->userdata('perfil') == FALSE || $this->session->userdata('perfil') != '666')
+            {
+                redirect(base_url().'inicio');
+            }
+            $respuesta = new stdClass();
+            if($this->input->post("id")){
+                
+                if($this->input->post("estado")==1){
+                    $estado=0;
+                }else{
+                    $estado=1;
+                }
+                $data=array(
+                        "estado" => $estado
+                    );
+                    $res = $this->modelo_almacen->modificar_productos($data,$this->input->post("id"));
+                    if($res){
+                        $respuesta->success=true;
+                        echo json_encode($respuesta);
+                        return;
+                    }else{
+                        $respuesta->success=false;
+                        echo json_encode($respuesta);
+                        return;
+                    }
+            }
         }
         public function ingresar_producto()
 	{

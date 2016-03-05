@@ -75,7 +75,7 @@ class universidad extends CI_Controller
             }
 
             
-            $result = $this->modelo_universidad->tabla_universidad($sidx,$sord,$limit,$start);
+            $result = $this->modelo_universidad->tabla_universidad($filtro,$sidx,$sord,$limit,$start);
             $respuesta = new stdClass(); 
             // Se agregan los datos de la respuesta del servidor
             $respuesta->page = 1;
