@@ -179,7 +179,7 @@ $(document).ready(function(){
                     url: "<?= base_url() ?>universidad/ingresar_universidad",
                     data: $("#form_universidad").serialize(),
                     beforeSend:function(){
-                        $("#res").html("enviando");
+                        $("#res").html("Enviando");
                     },success: function(res) {
                         var respuesta = $.parseJSON(res);
                         $("#res").html("");//cargar
