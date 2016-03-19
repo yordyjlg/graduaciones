@@ -3,8 +3,8 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-02-2016 a las 00:24:43
--- Versión del servidor: 5.5.27-log
+-- Tiempo de generación: 11-03-2016 a las 12:45:29
+-- Versión del servidor: 5.5.27
 -- Versión de PHP: 5.4.7
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
@@ -55,29 +55,31 @@ CREATE TABLE IF NOT EXISTS `almacen` (
   `nombre_producto` varchar(45) DEFAULT NULL,
   `cantidad` varchar(45) DEFAULT NULL,
   `precio` float DEFAULT NULL,
+  `estado` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`idalmacen`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=29 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=30 ;
 
 --
 -- Volcado de datos para la tabla `almacen`
 --
 
-INSERT INTO `almacen` (`idalmacen`, `nombre_producto`, `cantidad`, `precio`) VALUES
-(11, 'TÍTULO', 'N/A', 500),
-(12, 'DIPLOMA', 'N/A', 250),
-(13, 'MEDALLA', 'N/A', 300),
-(14, 'BOTÓN', 'N/A', 50),
-(15, 'LLAVERO', 'N/A', 50),
-(16, 'VIDEO', 'N/A', 100),
-(17, 'FOTOS TAMAÑO 10X15 CM', 'N/A', 150),
-(18, 'FOTOS TAMAÑO 20X25 CM', 'N/A', 200),
-(19, 'ARREGLOS FLORALES', 'N/A', 16.8),
-(20, 'MISA DE GRADUACIÓN', 'N/A', 50),
-(21, 'ALQUILER DE TOGA Y BIRRETE', '1600', 100),
-(22, 'PLACA DE RECONOCIMIENTO', 'N/A', 400),
-(23, 'ÁLBUM UNIVERSITARIO CON OVALO EXTRA LUJO', 'N/A', 150),
-(25, 'PORTA TÍTULO FORRADO EN PERCALINA CON LOGO', 'N/A', 250),
-(28, 'Mejor producto', '2000', 3500);
+INSERT INTO `almacen` (`idalmacen`, `nombre_producto`, `cantidad`, `precio`, `estado`) VALUES
+(11, 'TÍTULO', 'N/A', 500, 1),
+(12, 'DIPLOMA', 'N/A', 250, 1),
+(13, 'MEDALLA', 'N/A', 300, 1),
+(14, 'BOTÓN', 'N/A', 50, 0),
+(15, 'LLAVERO', 'N/A', 50, 1),
+(16, 'VIDEO', 'N/A', 100, 1),
+(17, 'FOTOS TAMAÑO 10X15 CM', 'N/A', 150, 1),
+(18, 'FOTOS TAMAÑO 20X25 CM', 'N/A', 200, 1),
+(19, 'ARREGLOS FLORALES', 'N/A', 16.8, 1),
+(20, 'MISA DE GRADUACIÓN', 'N/A', 50, 1),
+(21, 'ALQUILER DE TOGA Y BIRRETE', '1600', 100, 1),
+(22, 'PLACA DE RECONOCIMIENTO', 'N/A', 400, 1),
+(23, 'ÁLBUM UNIVERSITARIO CON OVALO EXTRA LUJO', 'N/A', 150, 1),
+(25, 'PORTA TÍTULO FORRADO EN PERCALINA CON LOGO', 'N/A', 250, 1),
+(28, 'Mejor producto', '2000', 3500, 1),
+(29, 'prueba', 'N/A', 150, 1);
 
 -- --------------------------------------------------------
 
@@ -100,14 +102,27 @@ CREATE TABLE IF NOT EXISTS `contrato` (
 --
 
 CREATE TABLE IF NOT EXISTS `cotizacion` (
-  `idcotizacion` int(11) NOT NULL,
+  `idcotizacion` int(11) NOT NULL AUTO_INCREMENT,
   `num_graduandos` varchar(45) DEFAULT NULL,
   `bs` varchar(45) DEFAULT NULL,
   `estatus` varchar(45) DEFAULT NULL,
   `usuario_ci_usuario` varchar(45) DEFAULT NULL,
-  `fecha` varchar(45) DEFAULT NULL,
+  `fecha` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idcotizacion`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+
+--
+-- Volcado de datos para la tabla `cotizacion`
+--
+
+INSERT INTO `cotizacion` (`idcotizacion`, `num_graduandos`, `bs`, `estatus`, `usuario_ci_usuario`, `fecha`) VALUES
+(1, '50', '12500', 'ENVIADOADMIN', '241260101', '2016-03-08 01:14:04'),
+(2, '51', NULL, 'ENVIADO', '241260101', '2016-03-08 01:52:38'),
+(3, '52', NULL, 'ENVIADO', '241260101', '2016-03-08 01:57:38'),
+(4, '53', '350000', 'VISTOUSU', '241260101', '2016-03-08 01:59:31'),
+(5, '54', NULL, 'ENVIADO', '241260101', '2016-03-08 02:00:47'),
+(6, '55', NULL, 'ENVIADO', '241260101', '2016-03-08 02:15:32'),
+(8, '56', NULL, 'ENVIADO', '241260101', '2016-03-08 21:29:52');
 
 -- --------------------------------------------------------
 
@@ -160,19 +175,16 @@ CREATE TABLE IF NOT EXISTS `galeria` (
   `directorio` varchar(45) NOT NULL,
   PRIMARY KEY (`idGaleria`),
   KEY `fk_Galeria_Universidad1_idx` (`Universidad_idUniversidad`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=33 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=73 ;
 
 --
 -- Volcado de datos para la tabla `galeria`
 --
 
 INSERT INTO `galeria` (`idGaleria`, `Imagen`, `Universidad_idUniversidad`, `directorio`) VALUES
-(27, 'CIMG1154.JPG', 4, 'galeria'),
-(28, 'CIMG1170.JPG', 4, 'galeria'),
-(29, 'CIMG1169.JPG', 4, 'galeria'),
-(30, 'CIMG1163.JPG', 4, 'galeria'),
-(31, 'CIMG1219.JPG', 4, 'galeria'),
-(32, 'CIMG1184.JPG', 4, 'galeria');
+(66, 'descarga.jpg', NULL, './imagenes/galeria/descarga.jpg'),
+(70, 'Gantz_full_color_by_uchihaZero.jpg', NULL, './imagenes/galeria/Gantz_full_color_by_uchiha'),
+(72, 'ew-hp72-hqvoldy.jpg', NULL, './imagenes/galeria/ew-hp72-hqvoldy.jpg');
 
 -- --------------------------------------------------------
 
@@ -191,7 +203,7 @@ CREATE TABLE IF NOT EXISTS `notificacion` (
   PRIMARY KEY (`idNotificacion`),
   KEY `fk_Notificacion_usuario1_idx` (`usuario_ci_usuario`),
   KEY `fk_notificacion_productos1_idx` (`productos_idproductos`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Volcado de datos para la tabla `notificacion`
@@ -199,8 +211,9 @@ CREATE TABLE IF NOT EXISTS `notificacion` (
 
 INSERT INTO `notificacion` (`idNotificacion`, `usuario_ci_usuario`, `productos_idproductos`, `estatus`, `cantidad`, `fecha`, `montoBs`) VALUES
 (2, 241260101, 125, 'VISTOUSU', 100, '2015-10-10', 500),
-(3, 241260101, 127, 'Enviado', 20, '2015-12-07', 0),
-(4, 241260101, 124, 'Enviado', 10, '2015-12-13', 0);
+(3, 241260101, 127, 'VISTOUSU', 20, '2015-12-07', 600000),
+(4, 241260101, 124, 'VISTOUSU', 10, '2015-12-13', 600000),
+(5, 241260101, 122, 'Enviado', 10, '2016-03-11', 0);
 
 -- --------------------------------------------------------
 
@@ -216,7 +229,7 @@ CREATE TABLE IF NOT EXISTS `notificaciones_mesajes` (
   `estatus` varchar(15) NOT NULL,
   `usuario_ci_usuario` int(11) NOT NULL,
   PRIMARY KEY (`idNotf`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
 
 --
 -- Volcado de datos para la tabla `notificaciones_mesajes`
@@ -228,7 +241,10 @@ INSERT INTO `notificaciones_mesajes` (`idNotf`, `mensaje`, `idNotificaciones`, `
 (15, 'Lo necesitamos urgente', 3, '2015-12-13', '', 241260101),
 (16, 'dentro de una semana', 4, '2015-12-13', '', 24126010),
 (17, 'si.', 2, '2015-12-16', '', 24126010),
-(18, '1000', 2, '2016-01-02', '', 24126010);
+(18, '1000', 2, '2016-01-02', '', 24126010),
+(19, 'listo', 3, '2016-03-05', '', 241260101),
+(20, 'ok.', 3, '2016-03-05', '', 24126010),
+(21, 'hola', 5, '2016-03-11', '', 0);
 
 -- --------------------------------------------------------
 
@@ -311,7 +327,7 @@ CREATE TABLE IF NOT EXISTS `productos` (
   `ImagenPro` varchar(45) DEFAULT NULL,
   `tipo` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idproductos`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=129 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=131 ;
 
 --
 -- Volcado de datos para la tabla `productos`
@@ -324,7 +340,8 @@ INSERT INTO `productos` (`idproductos`, `NombreProd`, `DescripcionPro`, `ImagenP
 (125, 'Anillo 4', 'Some default panel content here. Nulla vitae elit libero, a pharetra augue. Aenean lacinia bibendum nulla sed consectetur. Aenean eu leo quam.', 'stark_house.jpg', 'ANILLO'),
 (126, 'Anillo 5', 'Some default panel content here. Nulla vitae elit libero, a pharetra augue. Aenean lacinia bibendum nulla sed consectetur. Aenean eu leo quam.', 'foto.jpg', 'ANILLO'),
 (127, 'medalla ', 'For performance reasons, all icons require a base class and individual icon class. To use, place the following code just about anywhere. Be sure to leave a space between the icon and text for proper padding.', 'medallas.jpg', 'MEDALLA'),
-(128, 'medalla 1', 'For performance reasons, all icons require a base class and individual icon class. To use, place the following code just about anywhere. Be sure to leave a space between the icon and text for proper padding.', 'DSC_0491.JPG', 'MEDALLA');
+(128, 'medalla 1', 'For performance reasons, all icons require a base class and individual icon class. To use, place the following code just about anywhere. Be sure to leave a space between the icon and text for proper padding.', 'DSC_0491.JPG', 'MEDALLA'),
+(130, 'catalogo1', 'esto es una prueba de catalogo1', 'descarga_(1).jpg', 'CATALOGO');
 
 -- --------------------------------------------------------
 
@@ -374,8 +391,61 @@ CREATE TABLE IF NOT EXISTS `product_cotizacion` (
   `cantidad` int(11) DEFAULT NULL,
   `almacen_idalmacen` int(11) NOT NULL,
   PRIMARY KEY (`cotizacion_idcotizacion`,`almacen_idalmacen`),
-  KEY `fk_product_cotizacion_almacen1_idx` (`almacen_idalmacen`)
+  KEY `fk_product_cotizacion_almacen1_idx` (`almacen_idalmacen`),
+  KEY `cotizacion_idcotizacion` (`cotizacion_idcotizacion`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `product_cotizacion`
+--
+
+INSERT INTO `product_cotizacion` (`cotizacion_idcotizacion`, `cantidad`, `almacen_idalmacen`) VALUES
+(1, 50, 25),
+(1, 50, 28),
+(1, 50, 29),
+(2, 51, 11),
+(2, 51, 12),
+(2, 51, 18),
+(3, 52, 11),
+(3, 52, 16),
+(3, 52, 18),
+(3, 52, 21),
+(3, 52, 22),
+(3, 52, 23),
+(4, 53, 11),
+(4, 53, 13),
+(4, 53, 17),
+(4, 53, 19),
+(4, 53, 22),
+(4, 53, 29),
+(5, 54, 11),
+(5, 54, 12),
+(5, 54, 13),
+(5, 54, 15),
+(5, 54, 16),
+(5, 54, 17),
+(5, 54, 18),
+(5, 54, 19),
+(5, 54, 20),
+(5, 54, 21),
+(6, 55, 11),
+(6, 55, 12),
+(6, 55, 13),
+(6, 55, 15),
+(6, 55, 16),
+(6, 55, 17),
+(6, 55, 18),
+(6, 55, 19),
+(6, 55, 20),
+(6, 55, 21),
+(6, 55, 22),
+(6, 55, 23),
+(6, 55, 25),
+(6, 55, 28),
+(6, 55, 29),
+(8, 56, 11),
+(8, 56, 19),
+(8, 56, 23);
 
 -- --------------------------------------------------------
 
@@ -394,15 +464,16 @@ CREATE TABLE IF NOT EXISTS `solicitud_presupuesto` (
   PRIMARY KEY (`idsolicitud_presupuesto`),
   KEY `fk_solicitud_presupuesto_paquetes_grados1_idx` (`idpaquetes_grados`),
   KEY `fk_solicitud_presupuesto_usuario1_idx` (`ci_usuario`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Volcado de datos para la tabla `solicitud_presupuesto`
 --
 
 INSERT INTO `solicitud_presupuesto` (`idsolicitud_presupuesto`, `numero_graduandos`, `bs`, `estatus`, `idpaquetes_grados`, `ci_usuario`, `fecha`) VALUES
-(1, '50', NULL, 'ENVIADO', 4, 241260101, '2015-12-07 02:51:29'),
-(2, '50', NULL, 'ENVIADO', 4, 241260101, '2015-12-07 03:01:03');
+(1, '50', '500000', 'VISTOUSU', 4, 241260101, '2015-12-07 02:51:29'),
+(2, '50', NULL, 'ENVIADO', 4, 241260101, '2015-12-07 03:01:03'),
+(3, '50', NULL, 'ENVIADO', 5, 241260101, '2016-03-05 17:29:10');
 
 -- --------------------------------------------------------
 

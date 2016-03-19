@@ -1,0 +1,17 @@
+.margen {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+  /* ocultar tablas
+@media (max-width: 767px) {
+  #gbox_presupuesto {
+    display: none !important;
+  }
+}
+*/
+@media (max-width: 767px) {
+  .margen {
+    padding-left: 0% !important;
+    padding-right: 0% !important;
+  }
+}

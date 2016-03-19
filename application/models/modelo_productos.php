@@ -69,7 +69,32 @@ class modelo_productos extends CI_Model
             );
             return $this->db->insert('productos', $data);
         }
-        function solicitar_presupuesto_Producto($data){
+        function insertar_imagen_galeria($data){
+            
+            return $this->db->insert('galeria', $data);
+        }
+        function get_imagen_galeria(){
+            
+            $campos = array ( 
+				"*"
+ 		);
+                $data = $this->db->select($campos)
+		
+		->from('galeria')
+                ->get();
+            
+            if($data){
+                return $data->result_array();
+            }else{
+                return false;
+            }
+            
+        }
+        function eliminar_imagen($id){
+            $this->db->where('idGaleria', $id);
+            $this->db->delete('galeria');
+        }
+                function solicitar_presupuesto_Producto($data){
             $this->db->trans_start();
             $this->db->insert('notificacion', $data);
             
@@ -112,6 +137,28 @@ class modelo_productos extends CI_Model
                 ->result_array();
             //return $this->db->last_query();
         }
+        function contar_presupuestos_admin($tipo){
+             if($tipo=="anillos"){
+                    $tipoD="ANILLO";
+                }else if($tipo=="medallas"){
+                    $tipoD="MEDALLA";
+                }else if($tipo=="titulo"){
+                    $tipoD="TITULO";
+                }else if($tipo=="album"){
+                    $tipoD="ALBUM";
+                }
+                $campos = array (
+				"idNotificacion AS id"
+ 		);
+            return $this->db->select($campos)
+		->distinct()
+		->from('notificacion as notif')
+                ->join('productos AS prod', 'prod.idproductos = notif.productos_idproductos', 'LEFT')
+                ->where ('prod.tipo', strtoupper($tipoD))
+                ->get()
+                ->result_array();
+            //return $this->db->last_query();
+        }
         function tabla_listar_presupuestos($tipo, $sidx = 1, $sord = 1, $limit = 0, $start = 0){
             if($tipo=="anillos"){
                     $tipoD="ANILLO";
@@ -135,15 +182,34 @@ class modelo_productos extends CI_Model
                 ->limit($limit, $start)
                 ->get()
                 ->result_array();
-            /*$result = $this->db->select($fields)
-				->distinct()
-				->from('solicitud_documentos AS sd')
-				->join('documentos_solicitud_documentos AS dsd', 'dsd.id_solicitud_documento = sd.id', 'LEFT')
-                                ->join('documentos AS d', 'd.id = dsd.id_documento', 'LEFT')
-                                ->join('archivos_tipos AS at', 'at.id = d.tipo', 'LEFT')
-                                ->join('usuarios AS usu', 'usu.id = dsd.id_usuario', 'LEFT')
-				->where($clause)
-				->get()->result();*/
+        }
+        function tabla_listar_presupuestos_admin($tipo, $sidx = 1, $sord = 1, $limit = 0, $start = 0){
+            if($tipo=="anillos"){
+                    $tipoD="ANILLO";
+                }else if($tipo=="medallas"){
+                    $tipoD="MEDALLA";
+                }else if($tipo=="titulo"){
+                    $tipoD="TITULO";
+                }else if($tipo=="album"){
+                    $tipoD="ALBUM";
+                }
+            $campos = array (
+				"notif.*",
+                                "prod.*",
+                                "usu.ci_usuario",
+                                "usu.Nombre",
+                                "usu.Apellido"
+ 		);
+                 return $this->db->select($campos)
+		->distinct()
+		->from('notificacion as notif')
+                ->join('productos AS prod', 'prod.idproductos = notif.productos_idproductos', 'LEFT')
+                ->join('usuario AS usu', 'usu.ci_usuario = notif.usuario_ci_usuario', 'LEFT')
+                ->where ('prod.tipo', strtoupper($tipoD))
+                ->order_by($sidx, $sord)
+                ->limit($limit, $start)
+                ->get()
+                ->result_array();
         }
         function insertar_solicitud_presupuesto($idPaquete, $cedulaUsu, $numG){
             $data=array(
@@ -155,6 +221,18 @@ class modelo_productos extends CI_Model
             return $this->db->insert('solicitud_presupuesto', $data);
         }
         function contar_solicitud_presupuesto(){
+             $campos = array (
+				"*"
+ 		);
+            return $this->db->select($campos)
+		->distinct()
+		->from('solicitud_presupuesto')
+                ->where ('ci_usuario', $this->session->userdata('id_usuario'))
+                ->get()
+                ->result_array();
+            //return $this->db->last_query();
+        }
+        function contar_solicitud_presupuesto_admin(){
              $campos = array (
 				"*"
  		);
@@ -180,16 +258,25 @@ class modelo_productos extends CI_Model
                 ->limit($limit, $start)
                 ->get()
                 ->result_array();
-       
-            /*$result = $this->db->select($fields)
-				->distinct()
-				->from('solicitud_documentos AS sd')
-				->join('documentos_solicitud_documentos AS dsd', 'dsd.id_solicitud_documento = sd.id', 'LEFT')
-                                ->join('documentos AS d', 'd.id = dsd.id_documento', 'LEFT')
-                                ->join('archivos_tipos AS at', 'at.id = d.tipo', 'LEFT')
-                                ->join('usuarios AS usu', 'usu.id = dsd.id_usuario', 'LEFT')
-				->where($clause)
-				->get()->result();*/
+        }
+        function tabla_solicitud_presupuesto_admin( $sidx = 1, $sord = 1, $limit = 0, $start = 0){
+           
+            $campos = array (
+				"sp.*",
+                                "pqtg.*",
+                                "usu.ci_usuario",
+                                "usu.Nombre",
+                                "usu.Apellido"
+ 		);
+                return $this->db->select($campos)
+		->distinct()
+		->from('solicitud_presupuesto as sp')
+                ->join('paquetes_grados AS pqtg', 'pqtg.idpaquetes_grados = sp.idpaquetes_grados', 'LEFT')
+                ->join('usuario AS usu', 'usu.ci_usuario = sp.ci_usuario', 'LEFT')
+                ->order_by($sidx, $sord)
+                ->limit($limit, $start)
+                ->get()
+                ->result_array();
         }
         
         function get_datos_notificaciones($id){
@@ -269,6 +356,7 @@ class modelo_productos extends CI_Model
             $this->db->where('idNotificacion', $idntf);
             return $this->db->update('notificacion', $data);
         }
+        
         function insertar_presupuesto_sol_presupuesto($idntf,$data) {
             
             $this->db->where('idsolicitud_presupuesto', $idntf);
@@ -277,7 +365,8 @@ class modelo_productos extends CI_Model
         function get_datos_presupuesto_paquetes($id){
            
             $campos = array ( 
-				"*"
+				"*",
+                                "sp.estatus as es"
  		);
                 $data = $this->db->select($campos)
 		->distinct()
@@ -322,6 +411,36 @@ class modelo_productos extends CI_Model
                 
                 
                 return $num;
+        }
+        
+        function contar_notificaciones_cotizacion(){
+                $campos = array (
+				"*"
+ 		);
+                $num = $this->db->select($campos)
+		->distinct()
+		->from('cotizacion')
+                ->where ('estatus', 'ENVIADO')
+                ->get()
+                ->num_rows();
+                
+                
+                
+                return $num;
+        }
+        function get_notificaciones_cotizacion(){
+             
+                $campos = array (
+				"*"
+ 		);
+            return $this->db->select($campos)
+		->distinct()
+		->from('cotizacion as notif')
+                ->join('usuario AS usu', 'usu.ci_usuario = notif.usuario_ci_usuario', 'LEFT')
+                ->where ('notif.estatus', 'ENVIADO')
+                ->get()
+                ->result_array();
+            //return $this->db->last_query();
         }
         function get_notificaciones(){
              
@@ -384,4 +503,226 @@ class modelo_productos extends CI_Model
                 ->result_array();
             //return $this->db->last_query();
         }
+        
+        function contar_todas_notificaciones_solicitud_presupuesto_usuarios(){
+                $campos = array (
+				"*"
+ 		);
+                $num = $this->db->select($campos)
+		->distinct()
+		->from('solicitud_presupuesto')
+                ->where ('estatus', 'ENVIADOADMIN')
+                ->where ('ci_usuario', $this->session->userdata('datos')->ci_usuario)
+                ->get()
+                ->num_rows();
+                
+                
+                
+                return $num;
+        }
+        
+        function get_notificaciones_solicitud_presupuesto_usuarios(){
+             
+                $campos = array (
+				"*"
+ 		);
+            return $this->db->select($campos)
+		->distinct()
+		->from('solicitud_presupuesto as notif')
+                ->join('paquetes_grados AS pqt', 'pqt.idpaquetes_grados = notif.idpaquetes_grados', 'LEFT')
+                ->where ('estatus', 'ENVIADOADMIN')
+                ->where ('ci_usuario', $this->session->userdata('datos')->ci_usuario)
+                ->get()
+                ->result_array();
+            //return $this->db->last_query();
+        }
+        function contar_notificaciones_cotizacion_usuarios(){
+                $campos = array (
+				"*"
+ 		);
+                $num = $this->db->select($campos)
+		->distinct()
+		->from('cotizacion')
+                ->where ('estatus', 'ENVIADOADMIN')
+                ->where ('usuario_ci_usuario', $this->session->userdata('datos')->ci_usuario)
+                ->get()
+                ->num_rows();
+                
+                
+                
+                return $num;
+        }
+        function get_notificaciones_cotizacion_usuarios(){
+             
+                $campos = array (
+				"*"
+ 		);
+            return $this->db->select($campos)
+		->distinct()
+		->from('cotizacion as notif')
+                ->join('usuario AS usu', 'usu.ci_usuario = notif.usuario_ci_usuario', 'LEFT')
+                ->where ('notif.estatus', 'ENVIADOADMIN')
+                ->where ('usuario_ci_usuario', $this->session->userdata('datos')->ci_usuario)
+                ->get()
+                ->result_array();
+            //return $this->db->last_query();
+        }
+//============== fin notificaciones ======================================================================================        
+        
+        
+        function actualizar_notificacion_paquete($idntf,$data) {
+            
+            $this->db->where('idsolicitud_presupuesto', $idntf);
+            return $this->db->update('solicitud_presupuesto', $data);
+        }//return $this->db->insert_id();
+        
+        function insertar_cotizacion($dataCotizacion) {
+            
+            $this->db->trans_start();
+            $this->db->insert('cotizacion', $dataCotizacion);
+            $idCotizacion = $this->db->insert_id();
+            
+            if($idCotizacion){
+                $idProductos= $this->input->post("check");
+                foreach ($idProductos as $value) {
+                    $cotizacionProductos=array(
+                        'cotizacion_idcotizacion' => $idCotizacion,
+                        'cantidad' => $this->input->post("cantidad".$value),
+                        'almacen_idalmacen' => $value
+                    );
+                    $this->db->insert('product_cotizacion', $cotizacionProductos);
+                }
+            }
+            
+            $this->db->trans_complete();
+            if ($this->db->trans_status() === FALSE) {
+                return false;
+            }else{
+                return true;
+            }
+        }
+        
+        function actualizar_cotizacion($coti,$data) {
+            
+                $this->db->where('idcotizacion', $coti);
+                return $this->db->update('cotizacion', $data);
+            }
+        
+        function get_datos_cotizacion($id){
+           
+            $campos = array ( 
+				"*",
+                                "cotiza.estatus as cotizaestatus"
+ 		);
+                $data = $this->db->select($campos)
+		->distinct()
+		->from('cotizacion as cotiza')
+                ->join('usuario AS usu', 'usu.ci_usuario = cotiza.usuario_ci_usuario', 'LEFT')
+                ->where ('cotiza.idcotizacion', $id)
+                ->get()
+                ->result();
+                $data = $data['0'];
+                
+                
+                return $data;
+                
+        }
+        
+        function get_productos_cotizacion($id){
+            
+            $campos = array ( 
+				"*",
+                                "procoti.cantidad as cantidads"
+ 		);
+                $data = $this->db->select($campos)
+		
+		->from('product_cotizacion as procoti')
+                ->join('almacen AS almacen', 'almacen.idalmacen = procoti.almacen_idalmacen', 'LEFT')
+                ->where ('procoti.cotizacion_idcotizacion', $id)
+                ->get();
+            
+            if($data){
+                return $data->result_array();
+            }else{
+                return false;
+            }
+            
+        }
+        function contar_cotizaciones($filtro){
+             $campos = array (
+				"*"
+ 		);
+             $result = $this->db
+                    ->select($campos)
+                    ->distinct()
+		    ->from('cotizacion');
+             //$result = $this->filtro_universidad($filtro);
+             
+             $result = $this->db
+                    ->get()
+                    ->result_array();
+            return $result;
+            //return $this->db->last_query();
+        }
+        function tabla_cotizaciones($filtro, $sidx = 1, $sord = 1, $limit = 0, $start = 0){
+           
+            $campos = array (
+				"*",
+                                "cotizacion.estatus as cotEstatus"
+ 		);
+            
+            $result = $this->db
+                    ->select($campos)
+                    ->distinct()
+		    ->from('cotizacion')
+                    ->join('usuario AS usu', 'usu.ci_usuario = cotizacion.usuario_ci_usuario', 'LEFT');
+             //$result = $this->filtro_universidad($filtro);
+             
+             $result = $this->db
+                    ->order_by($sidx, $sord)
+                    ->limit($limit, $start)
+                    ->get()
+                    ->result_array();
+            return $result;
+          }
+        function contar_cotizaciones_usuario($filtro){
+             $campos = array (
+				"*"
+ 		);
+             $result = $this->db
+                    ->select($campos)
+                    ->distinct()
+		    ->from('cotizacion')
+                    ->where ('usuario_ci_usuario', $this->session->userdata('id_usuario'));
+             //$result = $this->filtro_universidad($filtro);
+             
+             $result = $this->db
+                    ->get()
+                    ->result_array();
+            return $result;
+            //return $this->db->last_query();
+        }
+        
+        function tabla_cotizaciones_usuario($filtro, $sidx = 1, $sord = 1, $limit = 0, $start = 0){
+           
+            $campos = array (
+				"*"
+ 		);
+            
+            $result = $this->db
+                    ->select($campos)
+                    ->distinct()
+		    ->from('cotizacion')
+                    ->where ('usuario_ci_usuario', $this->session->userdata('id_usuario'));
+             //$result = $this->filtro_universidad($filtro);
+             
+             $result = $this->db
+                    ->order_by($sidx, $sord)
+                    ->limit($limit, $start)
+                    ->get()
+                    ->result_array();
+            return $result;
+          }
+          
+          
 }

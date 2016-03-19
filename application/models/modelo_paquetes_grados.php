@@ -32,7 +32,7 @@ class modelo_paquetes_grados extends CI_Model
             $res= $this->db->insert('paquetes_grados', $data);
             
             
-            return $this->db->insert_id();;
+            return $this->db->insert_id();
         }
         function insertar_productos_pqt($idAlmace,$idPqt){
             $data=array(
@@ -41,6 +41,12 @@ class modelo_paquetes_grados extends CI_Model
             );
             $res= $this->db->insert('productos_pqt', $data);
             return $res;
+        }
+        
+        function actualizar_paquetes_grados($idPqt,$data) {
+            
+            $this->db->where('idpaquetes_grados', $idPqt);
+            return $this->db->update('paquetes_grados', $data);
         }
         function get_productos_paquete($id){
             

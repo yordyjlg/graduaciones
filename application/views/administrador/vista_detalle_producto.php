@@ -9,6 +9,8 @@
                     $tipod="titulo";
                 }else if($row->tipo=="ALBUM"){
                     $tipod="album";
+                }else if($row->tipo=="CATALOGO"){
+                    $tipod="catalogo";
                 } ?>
         <div class="span5" style="  margin-left: 0px;">
             <form id="form_usuarioM" name="formularioM" enctype="multipart/form-data"  method="post">

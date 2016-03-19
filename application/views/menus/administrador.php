@@ -90,9 +90,26 @@
                         $("#recargado").append(a1);
                     });
                     
+                    $.each(json.results[0][2].ntf_cotizacion, function(i, result){//border-bottom: 1px dotted #CCC;cursor:pointer;
+                        var a1= document.createElement('a');
+                        $(a1).attr('href','<?= base_url() ?>productos/ver_detalle_cotizacion/'+result['idcotizacion']);
+                        $(a1).attr('style', 'border-bottom: 4px dotted #fff;margin-bottom:10px;box-shadow: 0px 1px 2px #695E5E;text-align: center;');
+                        var div1= document.createElement('div');
+                            $(div1).attr('style', 'width:100%; word-wrap: break-word;white-space: initial;');
+                        var div2= document.createElement('div');
+                            $(div2).html('<label  style="font-weight: 700;cursor:pointer;" >Cotizacion de:</label></br><label  style="font-weight: 300;cursor:pointer;" >'+result['Nombre']+" "+result['Apellido']+'</label>');
+                        var div3= document.createElement('div');
+                            $(div3).html('<label  style="font-weight: 700;cursor:pointer;" >Graduandos:</label> <label  style="font-weight: 300;cursor:pointer;" >'+result['num_graduandos']+'</label>');
+                        
+                        $(div1).append(div2);
+                        $(div1).append(div3);
+                        $(a1).append(div1); 
+                        $("#recargado").append(a1);
+                    });
+                    
                     //notificaciones solicitud de presupuesto
                     
-                    $.each(json.results[0][2].ntf_s_presupuesto, function(i, result){//border-bottom: 1px dotted #CCC;cursor:pointer;
+                    $.each(json.results[0][3].ntf_s_presupuesto, function(i, result){//border-bottom: 1px dotted #CCC;cursor:pointer;
                         var a1= document.createElement('a');
                         $(a1).attr('href','<?= base_url() ?>productos/ver_presupuesto_paquetes/'+result['idsolicitud_presupuesto']);
                         $(a1).attr('style', 'border-bottom: 4px dotted #fff;margin-bottom:10px;box-shadow: 0px 1px 2px #695E5E;text-align: center;');
@@ -108,6 +125,8 @@
                         $(a1).append(div1); 
                         $("#recargado").append(a1);
                     });
+                    
+                    
                     
 		//document.getElementById(divid).innerHTML=xmlHttp.responseText;
 		setTimeout(function(){refreshDivs(divid,secs,url);},secs*1000);
@@ -135,6 +154,7 @@
 		<li><a href="<?= base_url() ?>productos/portaTitulos"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Enterprise Templates"/>Porta T&iacute;tulo</a></li>
                 <li><a href="<?= base_url() ?>productos/album"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Enterprise Templates"/>&Aacute;lbumes</a></li>
                 <li><a href="<?= base_url() ?>productos/paquetes"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Enterprise Templates"/>Paquetes de Grado</a></li>
+                <li><a href="<?= base_url() ?>productos/catalogos"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Enterprise Templates"/>Catálogo</a></li>
 	</ul></li>
 	<li class="topmenu"><a href="#" style="line-height:24px;"><span><img src="<?= base_url() ?>/img/aqua_1_46.png" alt="Samples"/>administrador</span></a>
             <ul>
@@ -150,23 +170,18 @@
                             <li><a href="#"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Core Templates"/>Consultar</a>
                         </ul>
                     </li>
-                    <li><a href="#"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Current Templates"/>Cronograma</a>
-                        <ul id="submenu" >
-                            <li><a href="#"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Core Templates"/>Registrar</a>
-                            <li><a href="#"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Core Templates"/>Consultar</a>
-                        </ul>
-                    </li>
+                    <li><a href="<?= base_url() ?>administrador/cronograma"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Current Templates"/>Cronograma</a></li>
                     <li><a href="#"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Current Templates"/>Presupuestos</a>
                         <ul id="submenu" >
-                            <li><a href="#"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Core Templates"/>Cotizacion</a>
-                            <li><a href="#"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Core Templates"/>Anillos de Graduaci&oacuten</a>
-                            <li><a href="#"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Core Templates"/>Medallas</a>
-                            <li><a href="#"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Core Templates"/>Porta T&iacutetulo</a>
-                            <li><a href="#"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Core Templates"/>&Aacutelbumes</a>
-                            <li><a href="#"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Core Templates"/>Paquetes de Grado</a>
+                            <li><a href="<?= base_url() ?>productos/cotizacion"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Core Templates"/>Cotizacion</a>
+                            <li><a href="<?= base_url() ?>productos/presupuestos_productos/anillos"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Core Templates"/>Anillos de Graduaci&oacuten</a>
+                            <li><a href="<?= base_url() ?>productos/presupuestos_productos/medallas"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Core Templates"/>Medallas</a>
+                            <li><a href="<?= base_url() ?>productos/presupuestos_productos/titulo"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Core Templates"/>Porta T&iacutetulo</a>
+                            <li><a href="<?= base_url() ?>productos/presupuestos_productos/album"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Core Templates"/>&Aacutelbumes</a>
+                            <li><a href="<?= base_url() ?>productos/presupuestos_paquetes"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Core Templates"/>Paquetes de Grado</a>
                         </ul>
                     </li>
-                    <li><a href="#"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Current Templates"/>Galer&iacute;a</a></li>
+                    <li><a href="<?= base_url() ?>administrador/galeria"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Current Templates"/>Galer&iacute;a</a></li>
                     <li><a href="#"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Current Templates"/>Usuario</a></li>
                     <li><a href="<?= base_url() ?>inicio/logout_ci"><img src="<?= base_url() ?>/img/aqua_1_50.png" alt="Current Templates"/>Cerrar sesi&oacuten</a></li>
             </ul>

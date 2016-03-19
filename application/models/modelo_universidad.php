@@ -93,4 +93,13 @@ class modelo_universidad extends CI_Model
             $this->db->insert('universidad', $data);
             return $this->db->insert_id();
         }
+        function insertar_actividad_cronograma($data){
+            
+            return $this->db->insert('actividades', $data);
+        }
+        function insertar_cronograma($data){
+            
+            $this->db->insert('cronograma', $data);
+            return $this->db->insert_id();
+        }
 }

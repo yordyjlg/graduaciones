@@ -62,7 +62,7 @@ function detalles(vent){
                     rowNum: 10,
                     page: 1,
                     sortname: 'idNotificacion',
-                    sortorder: 'asc',
+                    sortorder: 'desc',
                     viewrecords: true,
                     caption: 'Presupuestos Solicitados <?php echo $tipo; ?>',
                     resizable:true,
@@ -86,8 +86,11 @@ function detalles(vent){
                 <div  class=" row tablaHead" id="titulos" style="background-color: rgba(255, 255, 255, 0.32);">
                      <?php echo strtoupper($tipo); ?>
                 </div>
-        <table id="presupuesto"></table>
-        <div id="paginacion"> </div>
+        <?php if($tipo!="catalogo"){ ?>
+                <table id="presupuesto"></table>
+                <div id="paginacion"> </div>
+        <?php } ?>
+        
                <div class="loader">Porfavor espere. cargando...</div>
               
                      
@@ -100,10 +103,11 @@ function detalles(vent){
                                    <img id="imagenP" class="img-responsive img-thumbnail" alt="" src="<?= base_url() ?>imagenes/<?php echo $tipo; ?>/thumbs/<?php echo $row->ImagenPro; ?>"  style="height: 20%;width: 100%;" />
                                     <span class="img-nombre"><?php echo $row->NombreProd; ?></span>
                                    <div class="mask">
+                                       <?php if($tipo!="catalogo"){ ?>
 					<div class="info" style="height: 100%;width: 50%;">Acciones
                                             <a  data-toggle="modal" onClick="detalles(this);" href="#myModal" data-idf="<?php echo $row->idproductos; ?>" ><img style="height: 80%;width: 100%; " src="<?= base_url() ?>images/icono_solicitar_pres.png" alt="Modificar Imagen"/></a>
                                         </div>
-                                        
+                                        <?php } ?>
                                     </div></div>
                                   
                                   <ul id="css3descripcion" class="topdescripcion">
