@@ -80,14 +80,145 @@ class administrador extends CI_Controller
                         "respuest" => "Cronograma Guardado Correctamente"
                     );
            }
-           $data['imagenes'] = $this->modelo_productos->get_imagen_galeria();
            $data['universidad']= $this->modelo_universidad->get_universidedes();
            $data['menu']='menus/administrador'; 
            $data['contenido']='administrador/vista_cronograma'; 
            $this->load->view("template",$data);
 		
 	}
-        
+        function cronograma_ver_editar($id=null)
+	{  
+            if($this->session->userdata('perfil') == FALSE || $this->session->userdata('perfil') != '666')
+            {
+                redirect(base_url().'inicio');
+            }
+           if($this->input->post("guardar")){
+               $fechas = $this->input->post("fecha_actividad");
+               $horas = $this->input->post("hora");
+               $actividades = $this->input->post("actividad");
+               $lugares = $this->input->post("lugar");
+               if($this->input->post("fecha_actividad")){
+                   $dataCronograma=array(
+                       "TituloCrono" => $this->input->post("titulo"),
+                       "Universidad_idUniversidad" => $this->input->post("universidadS")
+                   );
+                   $this->modelo_universidad->modificar_cronograma($dataCronograma,$id);
+                   $this->modelo_universidad->eliminar_actividades($id);
+                   foreach ($this->input->post("fecha_actividad") as $key => $value) {
+                       $dataActividad=array(
+                            "hora" => $horas[$key],
+                            "actividad" => $actividades[$key],
+                            "lugar" => $lugares[$key],
+                            "fecha" => $value,
+                            "id_Cronograma" => $id
+                        );
+                       $this->modelo_universidad->insertar_actividad_cronograma($dataActividad);
+                   }
+                    
+
+                }
+                $data['respuesta'] =array(
+                        "clase" => "alert-success",
+                        "respuest" => "Cronograma Modificacdo Correctamente"
+                    );
+                 
+           }
+           $data['cronograma']= $this->modelo_universidad->get_cronograma($id);
+           $data['actividades']= $this->modelo_universidad->get_cronograma_actividades($id);
+           $actividadesOrder = array();
+           $i=0;
+           foreach ($data['actividades'] as $key => $value) {
+               
+               if($key==0){
+                   $actividadesOrder[$i]["fecha"]=$fecha = $value["fecha"];
+                   $actividadesOrder[$i]["actividades"][]=$value;
+                   
+               }else{
+                   if($value["fecha"]!=$fecha){
+                       $i++;
+                       $actividadesOrder[$i]["fecha"]=$fecha = $value["fecha"];
+                       $actividadesOrder[$i]["actividades"][]=$value;
+                       
+                   }else{
+                       $actividadesOrder[$i]["actividades"][]=$value;
+                   }
+               }
+               $fecha = $value["fecha"];
+               
+               
+           }
+           $data['actividades'] = $actividadesOrder;
+           $data['universidad']= $this->modelo_universidad->get_universidedes();
+           $data['menu']='menus/administrador'; 
+           $data['contenido']='administrador/vista_cronograma_ver_editar'; 
+           $this->load->view("template",$data);
+		
+	}
+        function ajax_tabla_cronograma(){
+            if($this->session->userdata('perfil') == FALSE || $this->session->userdata('perfil') != '666')
+            {
+                redirect(base_url().'inicio');
+            }
+            $page = (int)$this->input->post('page', true);  // Almacena el numero de pagina actual
+            $limit = (int)$this->input->post('rows', true); // Almacena el numero de filas que se van a mostrar por pagina
+            $sidx = $this->input->post('sidx', true);  // Almacena el indice por el cual se hará la ordenación de los datos
+            $sord = $this->input->post('sord', true);// Almacena el modo de ordenación
+            $filtro =array( );
+            if(!$sidx) $sidx =1;
+            // Se hace una consulta para saber cuantos registros se van a mostrar
+            $_contar = $this->modelo_universidad->contar_cronogramas($filtro);
+            $count = ( !empty($_contar) && count($_contar) > 0 ? count($_contar) : 0 );
+
+            //En base al numero de registros se obtiene el numero de paginas
+            if( $count >0 ) {
+                
+                $total_pages = ceil($count/$limit);
+            } else {
+                $total_pages = 0;
+            }
+            if ($page > $total_pages)
+                $page=$total_pages;
+
+            //Almacena numero de registro donde se va a empezar a recuperar los registros para la pagina
+            $start = $limit*$page - $limit;
+
+            
+            $result = $this->modelo_universidad->tabla_cronogramas($filtro,$sidx,$sord,$limit,$start);
+            $respuesta = new stdClass(); 
+            // Se agregan los datos de la respuesta del servidor
+            $respuesta->page = 1;
+            $respuesta->total = $total_pages;
+            $respuesta->records = $count;
+            $i=0;
+            
+            foreach ($result AS $i => $row) {
+                $modal = "<div class='text-align:center;'>";
+                $modal_bottom = '';
+                $modal_bottom .= '<a href="'.base_url("administrador/cronograma_ver_editar/".$row["id_Cronograma"]).'" class="btn btn-block btn-primary btn_editar" data-id="'.$row["id_Cronograma"].'"style="color:white; background-color: #3DB6E3;border-color: #359FC8;">Ver</a>';
+                
+                $modal .= '<a href="#" style="color:white;background-color: #3DB6E3;border-color: #359FC8;" data-toggle="modal" data-target="#myModal'.$row["id_Cronograma"].'" class="btn btn-block btn-outline btn-primary">Opciones</a>';
+                $modal .= '<div class="modal fade" id="myModal'.$row["id_Cronograma"].'" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog" role="document" style="width:300px;">
+                                    <div class="modal-content">
+                                            <div class="modal-header">
+                                                    <button type="button" style="font-size:21px;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabelsucursal'.$row["id_Cronograma"].'">Opciones de Cotización: '.$row["TituloCrono"].'</h4>
+                                            </div>
+                                            <div class="modal-body" style="padding-left:30px;padding-right:30px;">
+                                                '.$modal_bottom.'
+                                             </div>
+                                    </div>
+                            </div>
+                    </div>';
+                $modal .= "</div>";
+                $respuesta->rows[$i]['id']=$row["id_Cronograma"];
+                $respuesta->rows[$i]['cell']=array($row["id_Cronograma"],$row["TituloCrono"],$row["NombreUniversidad"],$modal);
+                $i++;
+            }
+
+            // La respuesta se regresa como json
+            echo json_encode($respuesta);
+        }
         function imagenes_galeria()
 	{  
            $data['imagenes'] = $this->modelo_productos->get_imagen_galeria();

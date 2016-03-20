@@ -362,17 +362,14 @@
 <script type="text/javascript">
             $(document).ready(function(){
            jQuery("#presupuesto").jqGrid({
-                    url:'<?= base_url() ?>productos/ajax_tabla_cotizacion/', 
+                    url:'<?= base_url() ?>administrador/ajax_tabla_cronograma/', 
                     datatype: 'json',
                     mtype: 'POST',
-                    colNames:['Id','Cliente','Nº Graduandos', 'Estatus','Bs','Fecha','Opciones'],
+                    colNames:['Id','Titulo','Universidad', 'Opciones'],
                     colModel:[
-                        {name:'idcotizacion', index:'idcotizacion', width:50, resizable:true, align:"center"},
-                        {name:'Nombre', index:'Nombre', width:150,resizable:true, sortable:true, align:"center"},
-                        {name:'num_graduandos', index:'num_graduandos', width:30,resizable:true, sortable:true, align:"center"},
-                        {name:'estatus', index:'estatus', resizable:true, width:50, align:"center"},
-                        {name:'bs', index:'bs', resizable:true, width:50, align:"center"},
-                        {name:'fecha', index:'fecha', resizable:true, width:50, align:"center"},
+                        {name:'id_Cronograma', index:'id_Cronograma', width:50, resizable:true, align:"center"},
+                        {name:'TituloCrono', index:'TituloCrono', width:150,resizable:true, sortable:true, align:"center"},
+                        {name:'Universidad_idUniversidad', index:'Universidad_idUniversidad', width:30,resizable:true, sortable:true, align:"center"},
                         {name:'ver',  sortable: false, title:false, resizable:true, width:50,height:10}
                     ],
                     height: "auto",
@@ -381,7 +378,7 @@
                     rowList: [30, 60,90,200],
                     rowNum: 10,
                     page: 1,
-                    sortname: 'idcotizacion',
+                    sortname: 'id_Cronograma',
                     sortorder: 'desc',
                     viewrecords: true,
                     caption: 'Cronogramas',
